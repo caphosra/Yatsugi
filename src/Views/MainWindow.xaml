@@ -3,7 +3,7 @@
         xmlns:vm="clr-namespace:Yatsugi.ViewModels;assembly=Yatsugi"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Width="800" Height="450"
+        Width="900" Height="500"
         x:Class="Yatsugi.Views.MainWindow"
         Icon="/Assets/icon.png"
         Title="Yatsuhgi"
