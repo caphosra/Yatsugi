@@ -62,7 +62,7 @@
 			</Style>
 		</StackPanel.Styles>
 		<TextBlock Classes="Title">Welcome to Yatsugi</TextBlock>
-		<Button Classes="Action">貸出</Button>
-		<Button Classes="Action">返却</Button>
+		<Button Classes="Action" Command="{Binding OnLentButtonClicked}">貸出</Button>
+		<Button Classes="Action" Command="{Binding OnReturnButtonClicked}">返却</Button>
   	</StackPanel>
 </UserControl>
