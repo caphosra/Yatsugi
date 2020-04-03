@@ -1,15 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Avalonia.Input;
 using ReactiveUI;
-
-using Yatsugi.Models;
 
 namespace Yatsugi.ViewModels
 {
@@ -34,7 +27,7 @@ namespace Yatsugi.ViewModels
                 .Subscribe();
         }
 
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        public override void OnWindowKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F11)
             {

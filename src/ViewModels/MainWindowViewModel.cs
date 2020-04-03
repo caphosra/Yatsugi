@@ -1,28 +1,72 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reactive.Linq;
 
 using ReactiveUI;
 
-using Yatsugi.Models;
+using Yatsugi.Models.DataTypes;
 
 namespace Yatsugi.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        ViewModelBase content;
+        public UserSettings Settings { get; set; }
 
-        public MainWindowViewModel()
-        {
-            Content = new StartMenuViewModel();
-        }
+        private ViewModelBase content;
 
         public ViewModelBase Content
         {
             get => content;
             private set => this.RaiseAndSetIfChanged(ref content, value);
+        }
+
+        public MainWindowViewModel()
+        {
+            Settings = UserSettings.LoadAll();
+            MoveToMainMenu();
+        }
+
+        public void MoveToMainMenu()
+        {
+            var startMenu = new StartMenuViewModel();
+            startMenu.OnMoveUserControl
+                .Take(1)
+                .Subscribe((eventType) =>
+                {
+                    switch (eventType)
+                    {
+                        case StartMenuViewEvents.ON_LENT_BUTTON_CLICKED:
+                            {
+                                MoveToLentView();
+                            }
+                            break;
+                        case StartMenuViewEvents.ON_RETURN_BUTTON_CLICKED:
+                            {
+                                MoveToReturnView();
+                            }
+                            break;
+                        case StartMenuViewEvents.ON_SETTINGS_KEY_PUSHED:
+                            {
+                                MoveToUserSettings();
+                            }
+                            break;
+                    }
+                });
+            Content = startMenu;
+        }
+
+        public void MoveToLentView()
+        {
+            Content = new LentViewModel();
+        }
+
+        public void MoveToReturnView()
+        {
+            Content = new ReturnViewModel();
+        }
+
+        public void MoveToUserSettings()
+        {
+            Content = new UserSettingsViewModel();
         }
     }
 }
