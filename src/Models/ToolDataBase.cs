@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -40,7 +39,7 @@ namespace Yatsugi.Models
             //
             // Groups
             //
-            if(File.Exists(GroupsDataFilePath))
+            if (File.Exists(GroupsDataFilePath))
             {
                 var yaml = File.ReadAllText(GroupsDataFilePath);
                 Groups = Deserializer.Deserialize<List<LentGroup>>(yaml);
@@ -61,7 +60,7 @@ namespace Yatsugi.Models
                 .Where(file => Regex.IsMatch(Path.GetFileName(file), "tool-.*"))
                 .ToList();
             Tools = new List<LentableTool>();
-            foreach(var file in files)
+            foreach (var file in files)
             {
                 var yaml = File.ReadAllText(file);
                 var tool = Deserializer.Deserialize<LentableTool>(yaml);
@@ -90,7 +89,7 @@ namespace Yatsugi.Models
             //
             // Tools
             //
-            foreach(var tool in Tools)
+            foreach (var tool in Tools)
             {
                 var file_path = GetToolDataFilePath(tool);
                 yaml = Serializer.Serialize(tool);

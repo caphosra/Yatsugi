@@ -21,7 +21,7 @@ namespace Yatsugi
                 BuildAvaloniaApp()
                     .StartWithClassicDesktopLifetime(args);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 LogWriter.Write(e.ToString(), isError: true);
             }

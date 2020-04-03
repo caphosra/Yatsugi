@@ -7,7 +7,6 @@
 
 using System;
 using System.IO;
-using System.Diagnostics;
 
 using Yatsugi.Models.DataTypes;
 
@@ -29,7 +28,7 @@ namespace Yatsugi.Models
 
         public static void Write(string text, bool isError = false)
         {
-            #if YATSUGI_ENABLE_LOG
+#if YATSUGI_ENABLE_LOG
 
             if (DoLog)
             {
@@ -42,7 +41,7 @@ namespace Yatsugi.Models
                 Logger.WriteLine($"[{(isError ? "ERROR" : "LOG")} {DateTime.Now}] {text}");
             }
 
-            #endif
+#endif
         }
 
         public static void Close()
