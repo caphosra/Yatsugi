@@ -8,5 +8,31 @@
     <Application.Styles>
         <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
         <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
+        <Style Selector="Button.Action">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="Width" Value="400"/>
+            <Setter Property="Height" Value="100"/>
+            <Setter Property="Margin" Value="50,30,50,30"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush Source="avares://Yatsugi/Assets/ButtonBar.png"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="Button.Action:pointerover">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush Source="avares://Yatsugi/Assets/ButtonBar_Hover.png"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="Button.Action:pressed /template/ ContentPresenter">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush Source="avares://Yatsugi/Assets/ButtonBar_Click.png"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Styles>
 </Application>
