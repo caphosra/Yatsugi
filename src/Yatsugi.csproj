@@ -12,11 +12,15 @@
             <SubType>Designer</SubType>
         </AvaloniaResource>
         <AvaloniaResource Include="Assets\**"/>
+        <EmbeddedResource Include="Assets\**" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="0.9.6"/>
         <PackageReference Include="Avalonia.Desktop" Version="0.9.6"/>
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.6"/>
         <PackageReference Include="YamlDotNet" Version="8.1.0"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="../AvaloniaGif/AvaloniaGif/AvaloniaGif.csproj" />
     </ItemGroup>
 </Project>
