@@ -6,16 +6,107 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Avalonia.Input;
+using ReactiveUI;
 
 using Yatsugi.Models;
+using Yatsugi.Models.DataTypes;
 
 namespace Yatsugi.ViewModels
 {
     public class LentViewModel : ViewModelBase
     {
+        public LentGroup ScannedGroup { get; set; }
+
+        public LentableTool ScannedTool { get; set; }
+
+        public string ScannedGroupName => ScannedGroup != null ? ScannedGroup.Name : "Waiting for scan...";
+
+        public string ScannedToolName => ScannedTool != null ? ScannedTool.Name : "Waiting for scan...";
+
+        public string StatusImageUrl => ScannedGroup == null || ScannedTool == null ? "resm:Yatsugi.Assets.Loading.gif" : "resm:Yatsugi.Assets.OKCheck.gif";
+
+        public bool LentButtonEnabled => ScannedGroup != null && ScannedTool != null;
+
+        public ReactiveCommand<Unit, Unit> OnMoveToStartMenu { get; set; }
+
         public LentViewModel()
         {
+            OnMoveToStartMenu = ReactiveCommand.Create<Unit, Unit>(unit => unit);
+        }
 
+        public void OnBarcodeInput(string input)
+        {
+            LogWriter.Write($"Recieved \"{input}\"");
+
+            if (!Guid.TryParse(input, out Guid guid))
+            {
+                return;
+            }
+
+            foreach (var tool in ToolDataBase.Tools)
+            {
+                if (tool.ID == guid)
+                {
+                    ScannedTool = tool;
+                    RepaintAll();
+                    return;
+                }
+            }
+
+            foreach (var group in ToolDataBase.Groups)
+            {
+                if (group.ID == guid)
+                {
+                    ScannedGroup = group;
+                    RepaintAll();
+                    return;
+                }
+            }
+        }
+
+        public void OnLentButtonClicked()
+        {
+            if (ScannedGroup == null || ScannedTool == null)
+            {
+
+            }
+        }
+
+        private StringBuilder InputText { get; set; } = new StringBuilder();
+
+        public override void OnWindowKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                OnBarcodeInput(InputText.ToString());
+                InputText = new StringBuilder();
+            }
+            else if (e.Key == Key.Escape)
+            {
+                OnMoveToStartMenu
+                    .Execute()
+                    .Subscribe();
+            }
+            else if (e.Key == Key.F11)
+            {
+                ScannedGroup = new LentGroup();
+                ScannedGroup.Name = "TestGroup";
+                ScannedTool = new LentableTool();
+                ScannedTool.Name = "TestTool";
+                RepaintAll();
+            }
+            else
+            {
+                InputText.Append(e.Key.ConvertToString());
+            }
+        }
+
+        public void RepaintAll()
+        {
+            this.RaisePropertyChanged("ScannedGroupName");
+            this.RaisePropertyChanged("ScannedToolName");
+            this.RaisePropertyChanged("StatusImageUrl");
+            this.RaisePropertyChanged("LentButtonEnabled");
         }
     }
 }

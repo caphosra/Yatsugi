@@ -56,7 +56,14 @@ namespace Yatsugi.ViewModels
 
         public void MoveToLentView()
         {
-            Content = new LentViewModel();
+            var lentView = new LentViewModel();
+            lentView.OnMoveToStartMenu
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToMainMenu();
+                });
+            Content = lentView;
         }
 
         public void MoveToReturnView()

@@ -34,5 +34,13 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style Selector="Button.Action:disabled /template/ ContentPresenter">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush Source="avares://Yatsugi/Assets/ButtonBar_Click.png"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Opacity" Value="0.5"/>
+        </Style>
     </Application.Styles>
 </Application>
