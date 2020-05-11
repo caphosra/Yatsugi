@@ -3,8 +3,8 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		x:Class="Yatsugi.Views.StartMenuView">
-	<StackPanel x:Name="MainPanel">
-		<StackPanel.Styles>
+	<DockPanel x:Name="MainPanel">
+		<DockPanel.Styles>
 			<Style Selector="TextBlock.Title">
 				<Setter Property="FontSize" Value="30"/>
 				<Setter Property="Margin" Value="30,30,30,30"/>
@@ -19,9 +19,10 @@
 					</Animation>
 				</Style.Animations>
 			</Style>
-			<Style Selector="Button.SlideFromRight">
+			<Style Selector="Button.SlideFromRight1">
 				<Setter Property="HorizontalAlignment" Value="Right"/>
             	<Setter Property="VerticalAlignment" Value="Bottom"/>
+				<Setter Property="Margin" Value="60,30,50,50"/>
 				<Style.Animations>
 					<Animation Delay="0:0:1" Duration="0:0:2">
 						<KeyFrame Cue="0%">
@@ -35,9 +36,46 @@
 					</Animation>
             	</Style.Animations>
 			</Style>
-		</StackPanel.Styles>
-		<TextBlock Classes="Title">Welcome to Yatsugi</TextBlock>
-		<Button Classes="Action SlideFromRight" Command="{Binding OnLentButtonClicked}">貸出</Button>
-		<Button Classes="Action SlideFromRight" Command="{Binding OnReturnButtonClicked}">返却</Button>
-	</StackPanel>
+			<Style Selector="Button.SlideFromRight2">
+				<Setter Property="HorizontalAlignment" Value="Right"/>
+            	<Setter Property="VerticalAlignment" Value="Bottom"/>
+				<Setter Property="Margin" Value="50,30,50,30"/>
+				<Style.Animations>
+					<Animation Delay="0:0:1.2" Duration="0:0:2">
+						<KeyFrame Cue="0%">
+							<Setter Property="Opacity" Value="0.0"/>
+							<Setter Property="TranslateTransform.X" Value="40.0"/>
+						</KeyFrame>
+						<KeyFrame Cue="100%">
+							<Setter Property="Opacity" Value="1.0"/>
+							<Setter Property="TranslateTransform.X" Value="0.0"/>
+						</KeyFrame>
+					</Animation>
+            	</Style.Animations>
+			</Style>
+			<Style Selector="Button.SlideFromRight3">
+				<Setter Property="HorizontalAlignment" Value="Right"/>
+            	<Setter Property="VerticalAlignment" Value="Bottom"/>
+				<Setter Property="Margin" Value="40,30,50,30"/>
+				<Style.Animations>
+					<Animation Delay="0:0:1.4" Duration="0:0:2">
+						<KeyFrame Cue="0%">
+							<Setter Property="Opacity" Value="0.0"/>
+							<Setter Property="TranslateTransform.X" Value="40.0"/>
+						</KeyFrame>
+						<KeyFrame Cue="100%">
+							<Setter Property="Opacity" Value="1.0"/>
+							<Setter Property="TranslateTransform.X" Value="0.0"/>
+						</KeyFrame>
+					</Animation>
+            	</Style.Animations>
+			</Style>
+		</DockPanel.Styles>
+		<TextBlock DockPanel.Dock="Left" Classes="Title">Welcome to Yatsugi</TextBlock>
+		<StackPanel DockPanel.Dock="Right">
+			<Button Classes="Action SlideFromRight1" Command="{Binding OnLentButtonClicked}">貸出</Button>
+			<Button Classes="Action SlideFromRight2" Command="{Binding OnReturnButtonClicked}">返却</Button>
+			<Button Classes="Action SlideFromRight3" Command="{Binding OnManageButtonClicked}">管理</Button>
+		</StackPanel>
+	</DockPanel>
 </UserControl>
