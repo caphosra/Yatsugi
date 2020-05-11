@@ -44,6 +44,11 @@ namespace Yatsugi.ViewModels
                                 MoveToReturnView();
                             }
                             break;
+                        case StartMenuViewEvents.ON_MANAGE_BUTTON_CLICKED:
+                            {
+                                MoveToToolManagerView();
+                            }
+                            break;
                         case StartMenuViewEvents.ON_SETTINGS_KEY_PUSHED:
                             {
                                 MoveToUserSettings();
@@ -69,6 +74,11 @@ namespace Yatsugi.ViewModels
         public void MoveToReturnView()
         {
             Content = new ReturnViewModel();
+        }
+
+        public void MoveToToolManagerView()
+        {
+            Content = new ToolManagerViewModel();
         }
 
         public void MoveToUserSettings()

@@ -27,6 +27,13 @@ namespace Yatsugi.ViewModels
                 .Subscribe();
         }
 
+        private void OnManageButtonClicked()
+        {
+            OnMoveUserControl
+                .Execute(StartMenuViewEvents.ON_MANAGE_BUTTON_CLICKED)
+                .Subscribe();
+        }
+
         public override void OnWindowKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F11)
@@ -44,6 +51,7 @@ namespace Yatsugi.ViewModels
     {
         ON_LENT_BUTTON_CLICKED,
         ON_RETURN_BUTTON_CLICKED,
+        ON_MANAGE_BUTTON_CLICKED,
         ON_SETTINGS_KEY_PUSHED
     }
 }
