@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 using YamlDotNet.Serialization;
 
@@ -36,14 +36,37 @@ namespace Yatsugi.Models
                 Deserializer = new DeserializerBuilder().Build();
             }
 
-            if(File.Exists(GroupsDataFilePath))
+            //
+            // Groups
+            //
+            if (File.Exists(GroupsDataFilePath))
             {
                 var yaml = File.ReadAllText(GroupsDataFilePath);
                 Groups = Deserializer.Deserialize<List<LentGroup>>(yaml);
+
+                LogWriter.Write($"Load groups list (Path: {GroupsDataFilePath})");
             }
             else
             {
                 Groups = new List<LentGroup>();
+
+                LogWriter.Write($"Init groups list");
+            }
+
+            //
+            // Tools
+            //
+            var files = Directory.GetFiles(UserSettings.DataDirectory)
+                .Where(file => Regex.IsMatch(Path.GetFileName(file), "tool-.*"))
+                .ToList();
+            Tools = new List<LentableTool>();
+            foreach (var file in files)
+            {
+                var yaml = File.ReadAllText(file);
+                var tool = Deserializer.Deserialize<LentableTool>(yaml);
+                Tools.Add(tool);
+
+                LogWriter.Write($"Load tool info (Path: {file})");
             }
         }
 
@@ -54,9 +77,30 @@ namespace Yatsugi.Models
                 Serializer = new SerializerBuilder().Build();
             }
 
+            //
+            // Groups
+            //
             var yaml = Serializer.Serialize(Groups);
             Directory.CreateDirectory(Path.GetDirectoryName(GroupsDataFilePath));
             File.WriteAllText(GroupsDataFilePath, yaml);
+
+            LogWriter.Write($"Record groups list (Path: {GroupsDataFilePath})");
+
+            //
+            // Tools
+            //
+            foreach (var tool in Tools)
+            {
+                var file_path = GetToolDataFilePath(tool);
+                yaml = Serializer.Serialize(tool);
+                Directory.CreateDirectory(Path.GetDirectoryName(file_path));
+                File.WriteAllText(file_path, yaml);
+
+                LogWriter.Write($"Record tool info (Path: {file_path})");
+            }
         }
+
+        private static string GetToolDataFilePath(LentableTool tool)
+            => $"tool-{tool.ID}.yml";
     }
 }

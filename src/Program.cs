@@ -1,8 +1,11 @@
 ﻿using System;
+
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Logging.Serilog;
 using Avalonia.ReactiveUI;
+
+using Yatsugi.Models;
 
 namespace Yatsugi
 {
@@ -18,9 +21,14 @@ namespace Yatsugi
                 BuildAvaloniaApp()
                     .StartWithClassicDesktopLifetime(args);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                System.IO.File.WriteAllText("error.log", e.ToString());
+                LogWriter.Write(e.ToString(), isError: true);
+            }
+            finally
+            {
+                LogWriter.Write("Exit");
+                LogWriter.Close();
             }
         }
 

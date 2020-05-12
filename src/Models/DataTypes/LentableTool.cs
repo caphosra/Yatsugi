@@ -6,7 +6,7 @@ namespace Yatsugi.Models.DataTypes
 {
     /// <summary>
     ///
-    /// This class stores the informationof the tool.
+    /// This class stores the information of the tool.
     ///
     /// </summary>
     public class LentableTool

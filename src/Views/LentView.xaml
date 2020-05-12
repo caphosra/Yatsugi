@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:gif="clr-namespace:AvaloniaGif;assembly=AvaloniaGif"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        x:Class="Yatsugi.Views.LentView">
+    <DockPanel>
+        <DockPanel.Styles>
+            <Style Selector="TextBlock.TagText">
+                <Setter Property="FontSize" Value="40"/>
+                <Setter Property="Margin" Value="50"/>
+            </Style>
+            <Style Selector="TextBlock.NameText">
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="Margin" Value="55"/>
+            </Style>
+            <Style Selector="Image.StatusImage">
+                <Setter Property="Width" Value="200"/>
+                <Setter Property="Height" Value="200"/>
+            </Style>
+        </DockPanel.Styles>
+        <StackPanel DockPanel.Dock="Left">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left" Classes="TagText">貸出先:</TextBlock>
+                <TextBlock DockPanel.Dock="Left" Classes="NameText" Text="{Binding ScannedGroupName}"/>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left" Classes="TagText">貸出器具:</TextBlock>
+                <TextBlock DockPanel.Dock="Left" Classes="NameText" Text="{Binding ScannedToolName}"/>
+            </DockPanel>
+            <Button Classes="Action" IsEnabled="{Binding LentButtonEnabled}" Command="{Binding OnLentButtonClicked}">貸出</Button>
+        </StackPanel>
+        <Image DockPanel.Dock="Right" Classes="StatusImage" gif:GifImage.SourceUriRaw="{Binding StatusImageUrl}"/>
+    </DockPanel>
+</UserControl>

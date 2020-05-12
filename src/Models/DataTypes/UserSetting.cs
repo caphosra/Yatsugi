@@ -22,17 +22,15 @@ namespace Yatsugi.Models.DataTypes
                 SETTINGS_FILE_NAME
             );
 
-        private UserSettings()
-        {
-
-        }
-
         public void WriteAll()
         {
             var serializer = new SerializerBuilder().Build();
             var yaml = serializer.Serialize(this);
+
             Directory.CreateDirectory(Path.GetDirectoryName(SettingsFilePath));
             File.WriteAllText(SettingsFilePath, yaml);
+
+            LogWriter.Write($"Update settings (Path: {SettingsFilePath})");
         }
 
         public static UserSettings LoadAll()
@@ -40,8 +38,13 @@ namespace Yatsugi.Models.DataTypes
             if (File.Exists(SettingsFilePath))
             {
                 var yaml = File.ReadAllText(SettingsFilePath);
+
                 var serializer = new DeserializerBuilder().Build();
-                return serializer.Deserialize<UserSettings>(yaml);
+                var settings = serializer.Deserialize<UserSettings>(yaml);
+
+                LogWriter.Write($"Load settings (Path: {SettingsFilePath})");
+
+                return settings;
             }
             else
             {
@@ -55,6 +58,7 @@ namespace Yatsugi.Models.DataTypes
             {
                 File.Delete(SettingsFilePath);
             }
+
             var defaultSetting = new UserSettings();
             defaultSetting.WriteAll();
             return defaultSetting;
