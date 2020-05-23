@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 
 using ReactiveUI;
 
+using Yatsugi.Models;
 using Yatsugi.Models.DataTypes;
 
 namespace Yatsugi.ViewModels
@@ -21,7 +22,7 @@ namespace Yatsugi.ViewModels
 
         public MainWindowViewModel()
         {
-            Settings = UserSettings.LoadAll();
+            ToolDataBase.LoadAll();
             MoveToMainMenu();
         }
 
