@@ -17,7 +17,6 @@ namespace Yatsugi.Models
             = new List<LentableTool>();
 
         private const string GROUPS_DATA_FILE_NAME = "groups.csv";
-
         public static string GroupsDataFilePath
             => Path.Combine(
                 UserSettings.DataDirectory,
@@ -31,17 +30,22 @@ namespace Yatsugi.Models
             //
             if (File.Exists(GroupsDataFilePath))
             {
+                LogWriter.Write($"Load groups list (Path: {GroupsDataFilePath})");
+
                 Groups = new List<LentGroup>();
 
                 var csv = File.ReadAllText(GroupsDataFilePath);
                 foreach(var content in csv.Split(Environment.NewLine, StringSplitOptions.None))
                 {
-                    var group = new LentGroup();
-                    group.FromString(content);
-                    Groups.Add(group);
-                }
+                    if (content != LentGroup.FIRST_LINE)
+                    {
+                        var group = new LentGroup();
+                        group.FromString(content);
+                        Groups.Add(group);
 
-                LogWriter.Write($"Load groups list (Path: {GroupsDataFilePath})");
+                        LogWriter.Write($"Group detected: {group}");
+                    }
+                }
             }
             else
             {
@@ -67,6 +71,9 @@ namespace Yatsugi.Models
                 LogWriter.Write($"Load tool info (Path: {file})");
             }
 
+            //
+            // Save files
+            //
             RecordAll();
         }
 
@@ -77,7 +84,9 @@ namespace Yatsugi.Models
             //
             var texts = Groups
                 .Select(group => group.ToString());
-            var text = string.Join(Environment.NewLine, texts);
+            var text = texts.Count() == 0
+                ? LentGroup.FIRST_LINE
+                : LentGroup.FIRST_LINE + Environment.NewLine + string.Join(Environment.NewLine, texts);
             Directory.CreateDirectory(Path.GetDirectoryName(GroupsDataFilePath));
             File.WriteAllText(GroupsDataFilePath, text);
 
@@ -89,7 +98,6 @@ namespace Yatsugi.Models
             foreach (var tool in Tools)
             {
                 var file_path = GetToolDataFilePath(tool);
-                Directory.CreateDirectory(Path.GetDirectoryName(file_path));
                 File.WriteAllText(file_path, tool.ToString());
 
                 LogWriter.Write($"Record tool info (Path: {file_path})");
@@ -97,6 +105,6 @@ namespace Yatsugi.Models
         }
 
         private static string GetToolDataFilePath(LentableTool tool)
-            => $"tool-{tool.ID.ToString()}.csv";
+            => Path.Combine(UserSettings.DataDirectory, $"tool-{tool.ID.ToString()}.csv");
     }
 }
