@@ -48,16 +48,10 @@ namespace Yatsugi.Models.DataTypes
             sb.Append(Name);
             sb.Append(",");
             sb.Append(ID.ToString());
-            sb.AppendLine();
-            int counter = 0;
             foreach (var record in History)
             {
+                sb.AppendLine();
                 sb.Append(record.ToString());
-                counter++;
-                if (counter != History.Count)
-                {
-                    sb.AppendLine();
-                }
             }
             return sb.ToString();
         }
