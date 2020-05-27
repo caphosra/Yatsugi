@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 using Avalonia.Input;
-using YamlDotNet.Serialization;
 
 using Yatsugi.Models.DataTypes;
 
@@ -14,7 +13,7 @@ namespace Yatsugi.Models
     {
         public static string ConvertToString(this Key key)
         {
-            switch(key)
+            switch (key)
             {
                 case Key.OemMinus:
                     return "-";

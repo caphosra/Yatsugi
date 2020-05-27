@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Linq;
 
 namespace Yatsugi.Models.DataTypes
 {
@@ -27,10 +29,37 @@ namespace Yatsugi.Models.DataTypes
 
         /// <summary>
         ///
-        /// The tools which the group borrowed and haven't returned.
+        /// Convert object to CSV format.
         ///
         /// </summary>
-        public List<LentableTool> LentTools { get; set; }
-            = new List<LentableTool>();
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append(Name);
+            sb.Append(",");
+            sb.Append(ID.ToString());
+            return sb.ToString();
+        }
+
+        /// <summary>
+        ///
+        /// Convert a text comma separated to LentGroup object.
+        ///
+        /// </summary>
+        public void FromString(string str)
+        {
+            if (str.Where(c => c == ',').Count() == 0)
+            {
+                Name = str;
+                ID = Guid.NewGuid();
+            }
+            else
+            {
+                Name = str.Split(',')[0];
+                ID = Guid.Parse(str.Split(',')[1]);
+            }
+        }
+
+        public const string FIRST_LINE = "チーム名,ID(自動生成)";
     }
 }

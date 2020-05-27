@@ -17,10 +17,11 @@ namespace Yatsugi
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel(),
+                var mainWindow = new MainWindow {
+                    DataContext = new MainWindowViewModel()
                 };
+                mainWindow.OnWindowOpened();
+                desktop.MainWindow = mainWindow;
             }
 
             base.OnFrameworkInitializationCompleted();

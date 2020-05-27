@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Yatsugi.Models.DataTypes
 {
@@ -30,8 +31,8 @@ namespace Yatsugi.Models.DataTypes
         /// The records which shows the history of the tool.
         ///
         /// </summary>
-        public List<DateTimeSpan> History { get; set; }
-            = new List<DateTimeSpan>();
+        public List<LentRecord> History { get; set; }
+            = new List<LentRecord>();
 
         /// <summary>
         ///
@@ -40,5 +41,34 @@ namespace Yatsugi.Models.DataTypes
         /// </summary>
         public bool IsLentNow
             => History.Any(record => record.End == null);
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append(Name);
+            sb.Append(",");
+            sb.Append(ID.ToString());
+            foreach (var record in History)
+            {
+                sb.AppendLine();
+                sb.Append(record.ToString());
+            }
+            return sb.ToString();
+        }
+
+        public void FromString(string text)
+        {
+            var texts = text.Split(Environment.NewLine, StringSplitOptions.None);
+            var name_and_id = texts[0];
+            Name = name_and_id.Split(",")[0];
+            ID = Guid.Parse(name_and_id.Split(",")[1]);
+            texts = texts.Skip(1).ToArray();
+            foreach (var record_text in texts)
+            {
+                var record = new LentRecord();
+                record.FromString(record_text);
+                History.Add(record);
+            }
+        }
     }
 }
