@@ -20,9 +20,7 @@
 				</Style.Animations>
 			</Style>
 			<Style Selector="Button.SlideFromRight1">
-				<Setter Property="HorizontalAlignment" Value="Right"/>
-            	<Setter Property="VerticalAlignment" Value="Bottom"/>
-				<Setter Property="Margin" Value="60,30,50,50"/>
+				<Setter Property="Margin" Value="60,30,50,30"/>
 				<Style.Animations>
 					<Animation Delay="0:0:1" Duration="0:0:2">
 						<KeyFrame Cue="0%">
@@ -37,8 +35,6 @@
             	</Style.Animations>
 			</Style>
 			<Style Selector="Button.SlideFromRight2">
-				<Setter Property="HorizontalAlignment" Value="Right"/>
-            	<Setter Property="VerticalAlignment" Value="Bottom"/>
 				<Setter Property="Margin" Value="50,30,50,30"/>
 				<Style.Animations>
 					<Animation Delay="0:0:1.2" Duration="0:0:2">
@@ -54,8 +50,6 @@
             	</Style.Animations>
 			</Style>
 			<Style Selector="Button.SlideFromRight3">
-				<Setter Property="HorizontalAlignment" Value="Right"/>
-            	<Setter Property="VerticalAlignment" Value="Bottom"/>
 				<Setter Property="Margin" Value="40,30,50,30"/>
 				<Style.Animations>
 					<Animation Delay="0:0:1.4" Duration="0:0:2">
