@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Reactive.Linq;
 
+using MessageBox.Avalonia.DTO;
+using MessageBox.Avalonia.Enums;
 using ReactiveUI;
 
+using Yatsugi.Views;
 using Yatsugi.Models;
 using Yatsugi.Models.DataTypes;
 
@@ -13,7 +16,6 @@ namespace Yatsugi.ViewModels
         public UserSettings Settings { get; set; }
 
         private ViewModelBase content;
-
         public ViewModelBase Content
         {
             get => content;
@@ -22,40 +24,55 @@ namespace Yatsugi.ViewModels
 
         public MainWindowViewModel()
         {
-            ToolDataBase.LoadAll();
-            MoveToMainMenu();
+            MoveToStartMenu();
         }
 
-        public void MoveToMainMenu()
+        public override async void OnWindowOpened(MainWindow mainWindow)
+        {
+            try
+            {
+                ToolDataBase.LoadAll();
+            }
+            catch(Exception ex)
+            {
+                var msBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow(new MessageBoxStandardParams{
+                    ButtonDefinitions = ButtonEnum.Ok,
+                    ContentTitle = "Error ocurred: It seems to fail to load setting files.",
+                    ContentMessage = ex.ToString(),
+                    Icon = Icon.Error,
+                    Style = Style.MacOs
+                });
+                await msBoxStandardWindow.ShowDialog(mainWindow);
+                throw ex;
+            }
+        }
+
+        public void MoveToStartMenu()
         {
             var startMenu = new StartMenuViewModel();
-            startMenu.OnMoveUserControl
+            startMenu.OnLentButtonClicked
                 .Take(1)
-                .Subscribe((eventType) =>
+                .Subscribe((unit) =>
                 {
-                    switch (eventType)
-                    {
-                        case StartMenuViewEvents.ON_LENT_BUTTON_CLICKED:
-                            {
-                                MoveToLentView();
-                            }
-                            break;
-                        case StartMenuViewEvents.ON_RETURN_BUTTON_CLICKED:
-                            {
-                                MoveToReturnView();
-                            }
-                            break;
-                        case StartMenuViewEvents.ON_MANAGE_BUTTON_CLICKED:
-                            {
-                                MoveToToolManagerView();
-                            }
-                            break;
-                        case StartMenuViewEvents.ON_SETTINGS_KEY_PUSHED:
-                            {
-                                MoveToUserSettings();
-                            }
-                            break;
-                    }
+                    MoveToLentView();
+                });
+            startMenu.OnReturnButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToReturnView();
+                });
+            startMenu.OnManageButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToToolManagerView();
+                });
+            startMenu.OnSettingKeyDown
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToUserSettings();
                 });
             Content = startMenu;
         }
@@ -63,11 +80,11 @@ namespace Yatsugi.ViewModels
         public void MoveToLentView()
         {
             var lentView = new LentViewModel();
-            lentView.OnMoveToStartMenu
+            lentView.OnBackButtonClicked
                 .Take(1)
                 .Subscribe((unit) =>
                 {
-                    MoveToMainMenu();
+                    MoveToStartMenu();
                 });
             Content = lentView;
         }
@@ -79,7 +96,14 @@ namespace Yatsugi.ViewModels
 
         public void MoveToToolManagerView()
         {
-            Content = new ToolManagerViewModel();
+            var toolManagerViewModel = new ToolManagerViewModel();
+            toolManagerViewModel.OnBackButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToStartMenu();
+                });
+            Content = toolManagerViewModel;
         }
 
         public void MoveToUserSettings()
