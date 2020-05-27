@@ -42,6 +42,14 @@ namespace Yatsugi.Models.DataTypes
         public bool IsLentNow
             => History.Any(record => record.End == null);
 
+        /// <summary>
+        ///
+        /// Convert IsLentNow to string.
+        ///
+        /// </summary>
+        public string IsLentNowStr
+            => IsLentNow ? "貸出中" : "返却済み";
+
         public override string ToString()
         {
             var sb = new StringBuilder();

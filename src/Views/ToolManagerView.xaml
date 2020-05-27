@@ -4,22 +4,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Yatsugi.Views.ToolManagerView">
-    <StackPanel>
-        <StackPanel.Styles>
+    <DockPanel>
+        <DockPanel.Styles>
             <Style Selector="TextBlock.TitleText">
-                <Setter Property="FontSize" Value="40"/>
-                <Setter Property="Margin" Value="50"/>
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="Margin" Value="40,20"/>
             </Style>
-        </StackPanel.Styles>
-        <TextBlock Classes="TitleText">工具一覧</TextBlock>
-        <ScrollViewer>
+            <Style Selector="TextBlock.ToolNameText">
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="Margin" Value="20,20"/>
+            </Style>
+            <Style Selector="Button.SmallButton">
+                <Setter Property="Width" Value="300"/>
+                <Setter Property="Margin" Value="20,30,20,30"/>
+            </Style>
+        </DockPanel.Styles>
+        <TextBlock DockPanel.Dock="Top" Classes="TitleText">工具一覧</TextBlock>
+        <ScrollViewer Margin="50,10" DockPanel.Dock="Top">
             <ItemsControl Items="{Binding Tools}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Left" Classes="ToolNameText" Text="{Binding Name}"/>
+                            <TextBlock DockPanel.Dock="Left" Classes="ToolNameText" Text="{Binding ID}"/>
+                            <TextBlock DockPanel.Dock="Left" Classes="ToolNameText" Text="{Binding IsLentNowStr}"/>
+                        </DockPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-    </StackPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <Button DockPanel.Dock="Left" Classes="Action SmallButton">追加</Button>
+            <Button DockPanel.Dock="Left" Classes="Action SmallButton" Command="{Binding OnBackButtonClicked}">戻る</Button>
+        </DockPanel>
+    </DockPanel>
 </UserControl>
