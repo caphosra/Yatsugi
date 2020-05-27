@@ -1,4 +1,5 @@
 using System;
+using System.Reactive;
 using System.Reactive.Linq;
 
 using Avalonia.Input;
@@ -8,50 +9,27 @@ namespace Yatsugi.ViewModels
 {
     public class StartMenuViewModel : ViewModelBase
     {
+        public ReactiveCommand<Unit, Unit> OnLentButtonClicked { get; set; }
+        public ReactiveCommand<Unit, Unit> OnReturnButtonClicked { get; set; }
+        public ReactiveCommand<Unit, Unit> OnManageButtonClicked { get; set; }
+        public ReactiveCommand<Unit, Unit> OnSettingKeyDown { get; set; }
+
         public StartMenuViewModel()
         {
-            OnMoveUserControl = ReactiveCommand.Create<StartMenuViewEvents, StartMenuViewEvents>(eventType => eventType);
-        }
-
-        private void OnLentButtonClicked()
-        {
-            OnMoveUserControl
-                .Execute(StartMenuViewEvents.ON_LENT_BUTTON_CLICKED)
-                .Subscribe();
-        }
-
-        private void OnReturnButtonClicked()
-        {
-            OnMoveUserControl
-                .Execute(StartMenuViewEvents.ON_RETURN_BUTTON_CLICKED)
-                .Subscribe();
-        }
-
-        private void OnManageButtonClicked()
-        {
-            OnMoveUserControl
-                .Execute(StartMenuViewEvents.ON_MANAGE_BUTTON_CLICKED)
-                .Subscribe();
+            OnLentButtonClicked = ReactiveCommand.Create(() => { });
+            OnReturnButtonClicked = ReactiveCommand.Create(() => { });
+            OnManageButtonClicked = ReactiveCommand.Create(() => { });
+            OnSettingKeyDown = ReactiveCommand.Create(() => { });
         }
 
         public override void OnWindowKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F11)
             {
-                OnMoveUserControl
-                    .Execute(StartMenuViewEvents.ON_SETTINGS_KEY_PUSHED)
+                OnSettingKeyDown
+                    .Execute()
                     .Subscribe();
             }
         }
-
-        public ReactiveCommand<StartMenuViewEvents, StartMenuViewEvents> OnMoveUserControl { get; set; }
-    }
-
-    public enum StartMenuViewEvents
-    {
-        ON_LENT_BUTTON_CLICKED,
-        ON_RETURN_BUTTON_CLICKED,
-        ON_MANAGE_BUTTON_CLICKED,
-        ON_SETTINGS_KEY_PUSHED
     }
 }
