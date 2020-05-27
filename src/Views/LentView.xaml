@@ -18,6 +18,10 @@
                 <Setter Property="Width" Value="200"/>
                 <Setter Property="Height" Value="200"/>
             </Style>
+            <Style Selector="Button.SmallButton">
+                <Setter Property="Width" Value="300"/>
+                <Setter Property="Margin" Value="20,30,20,30"/>
+            </Style>
         </DockPanel.Styles>
         <StackPanel DockPanel.Dock="Left">
             <DockPanel>
@@ -28,8 +32,11 @@
                 <TextBlock DockPanel.Dock="Left" Classes="TagText">貸出器具:</TextBlock>
                 <TextBlock DockPanel.Dock="Left" Classes="NameText" Text="{Binding ScannedToolName}"/>
             </DockPanel>
-            <Button Classes="Action" IsEnabled="{Binding LentButtonEnabled}" Command="{Binding OnLentButtonClicked}">貸出</Button>
+            <DockPanel>
+                 <Button DockPanel.Dock="Left" Classes="Action SmallButton" IsEnabled="{Binding LentButtonEnabled}" Command="{Binding OnLentButtonClicked}">貸出</Button>
+                 <Button DockPanel.Dock="Left" Classes="Action SmallButton" Command="{Binding OnBackButtonClicked}">戻る</Button>
+            </DockPanel>
         </StackPanel>
-        <Image DockPanel.Dock="Right" Classes="StatusImage" gif:GifImage.SourceUriRaw="{Binding StatusImageUrl}"/>
+        <Image DockPanel.Dock="Left" Classes="StatusImage" Source="{Binding StatusImageUrl}"/>
     </DockPanel>
 </UserControl>
