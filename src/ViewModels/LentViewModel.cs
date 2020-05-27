@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
+using Avalonia.Data.Converters;
 using Avalonia.Input;
 using ReactiveUI;
 
@@ -15,9 +16,31 @@ namespace Yatsugi.ViewModels
 {
     public class LentViewModel : ViewModelBase
     {
-        public LentGroup ScannedGroup { get; set; }
+        private LentGroup scannedGroup;
+        public LentGroup ScannedGroup
+        {
+            get => scannedGroup;
+            set
+            {
+                scannedGroup = value;
+                this.RaisePropertyChanged("ScannedGroupName");
+                this.RaisePropertyChanged("StatusImageUrl");
+                this.RaisePropertyChanged("LentButtonEnabled");
+            }
+        }
 
-        public LentableTool ScannedTool { get; set; }
+        private LentableTool scannedTool;
+        public LentableTool ScannedTool
+        {
+            get => scannedTool;
+            set
+            {
+                scannedTool = value;
+                this.RaisePropertyChanged("ScannedToolName");
+                this.RaisePropertyChanged("StatusImageUrl");
+                this.RaisePropertyChanged("LentButtonEnabled");
+            }
+        }
 
         public string ScannedGroupName => ScannedGroup != null ? ScannedGroup.Name : "Waiting for scan...";
 
@@ -27,11 +50,11 @@ namespace Yatsugi.ViewModels
 
         public bool LentButtonEnabled => ScannedGroup != null && ScannedTool != null;
 
-        public ReactiveCommand<Unit, Unit> OnMoveToStartMenu { get; set; }
+        public ReactiveCommand<Unit, Unit> OnBackButtonClicked { get; set; }
 
         public LentViewModel()
         {
-            OnMoveToStartMenu = ReactiveCommand.Create<Unit, Unit>(unit => unit);
+            OnBackButtonClicked = ReactiveCommand.Create(() => { });
         }
 
         public void OnBarcodeInput(string input)
@@ -48,7 +71,6 @@ namespace Yatsugi.ViewModels
                 if (tool.ID == guid)
                 {
                     ScannedTool = tool;
-                    RepaintAll();
                     return;
                 }
             }
@@ -58,7 +80,6 @@ namespace Yatsugi.ViewModels
                 if (group.ID == guid)
                 {
                     ScannedGroup = group;
-                    RepaintAll();
                     return;
                 }
             }
@@ -81,32 +102,17 @@ namespace Yatsugi.ViewModels
                 OnBarcodeInput(InputText.ToString());
                 InputText = new StringBuilder();
             }
-            else if (e.Key == Key.Escape)
-            {
-                OnMoveToStartMenu
-                    .Execute()
-                    .Subscribe();
-            }
             else if (e.Key == Key.F11)
             {
                 ScannedGroup = new LentGroup();
                 ScannedGroup.Name = "TestGroup";
                 ScannedTool = new LentableTool();
                 ScannedTool.Name = "TestTool";
-                RepaintAll();
             }
             else
             {
                 InputText.Append(e.Key.ConvertToString());
             }
-        }
-
-        public void RepaintAll()
-        {
-            this.RaisePropertyChanged("ScannedGroupName");
-            this.RaisePropertyChanged("ScannedToolName");
-            this.RaisePropertyChanged("StatusImageUrl");
-            this.RaisePropertyChanged("LentButtonEnabled");
         }
     }
 }
