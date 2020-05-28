@@ -44,11 +44,24 @@ namespace Yatsugi.Models.DataTypes
 
         /// <summary>
         ///
-        /// Convert IsLentNow to string.
+        /// The name of the group tool lent.
         ///
         /// </summary>
-        public string IsLentNowStr
-            => IsLentNow ? "貸出中" : "返却済み";
+        public string RentTo
+        {
+            get
+            {
+                var record = History.LastOrDefault();
+                if (record == null || record.End != null)
+                {
+                    return "返却済み";
+                }
+                else
+                {
+                    return record.Group.Name;
+                }
+            }
+        }
 
         public override string ToString()
         {

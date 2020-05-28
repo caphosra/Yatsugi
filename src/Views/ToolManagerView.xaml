@@ -27,7 +27,7 @@
                         <DockPanel>
                             <TextBlock DockPanel.Dock="Left" Classes="ToolNameText" Text="{Binding Name}"/>
                             <TextBlock DockPanel.Dock="Left" Classes="ToolNameText" Text="{Binding ID}"/>
-                            <TextBlock DockPanel.Dock="Left" Classes="ToolNameText" Text="{Binding IsLentNowStr}"/>
+                            <TextBlock DockPanel.Dock="Left" Classes="ToolNameText" Text="{Binding RentTo}"/>
                         </DockPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
