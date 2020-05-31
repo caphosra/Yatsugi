@@ -8,6 +8,9 @@
     <Application.Styles>
         <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
         <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
+        <!--
+            Action Class (Button)
+        -->
         <Style Selector="Button.Action">
             <Setter Property="FontSize" Value="30"/>
             <Setter Property="Width" Value="400"/>
@@ -43,6 +46,24 @@
                 </Setter.Value>
             </Setter>
             <Setter Property="Opacity" Value="0.5"/>
+        </Style>
+        <!--
+            SmallButton Class (Button)
+        -->
+        <Style Selector="Button.SmallButton">
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="Margin" Value="20,30,20,30"/>
+        </Style>
+        <!--
+            MiniButton Class (Button)
+        -->
+        <Style Selector="Button.MiniButton">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </Application.Styles>
 </Application>
