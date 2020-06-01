@@ -19,6 +19,7 @@ namespace Yatsugi.ViewModels
         public ReactiveCommand<Unit, Unit> OnAddButtonClicked { get; set; }
         public ReactiveCommand<Guid, Guid> OnManageButtonClicked { get; set; }
         public ReactiveCommand<Guid, Guid> OnHistoryButtonClicked { get; set; }
+        public ReactiveCommand<Guid, Guid> OnQRCodeButtonClicked { get; set; }
         public ReactiveCommand<Guid, Guid> OnDeleteButtonClicked { get; set; }
         public ReactiveCommand<Unit, Unit> OnBackButtonClicked { get; set; }
 
@@ -29,6 +30,7 @@ namespace Yatsugi.ViewModels
             OnAddButtonClicked = ReactiveCommand.Create(() => { });
             OnManageButtonClicked = ReactiveCommand.Create<Guid, Guid>((guid) => guid);
             OnHistoryButtonClicked = ReactiveCommand.Create<Guid, Guid>((guid) => guid);
+            OnQRCodeButtonClicked = ReactiveCommand.Create<Guid, Guid>((guid) => guid);
             OnDeleteButtonClicked = ReactiveCommand.Create<Guid, Guid>((guid) => guid);
             OnBackButtonClicked = ReactiveCommand.Create(() => { });
 
@@ -40,6 +42,8 @@ namespace Yatsugi.ViewModels
                         .InvokeCommand(OnManageButtonClicked);
                     item.OnHistoryButtonClicked
                         .InvokeCommand(OnHistoryButtonClicked);
+                    item.OnQRCodeButtonClicked
+                        .InvokeCommand(OnQRCodeButtonClicked);
                     item.OnDeleteButtonClicked
                         .InvokeCommand(OnDeleteButtonClicked);
                     return item;
@@ -55,6 +59,7 @@ namespace Yatsugi.ViewModels
 
             public ReactiveCommand<Unit, Guid> OnManageButtonClicked { get; set; }
             public ReactiveCommand<Unit, Guid> OnHistoryButtonClicked { get; set; }
+            public ReactiveCommand<Unit, Guid> OnQRCodeButtonClicked { get; set; }
             public ReactiveCommand<Unit, Guid> OnDeleteButtonClicked { get; set; }
 
             public RenderableTool(LentableTool tool)
@@ -68,6 +73,10 @@ namespace Yatsugi.ViewModels
                     return tool.ID;
                 });
                 OnHistoryButtonClicked = ReactiveCommand.Create<Unit, Guid>((unit) =>
+                {
+                    return tool.ID;
+                });
+                OnQRCodeButtonClicked = ReactiveCommand.Create<Unit, Guid>((unit) =>
                 {
                     return tool.ID;
                 });
