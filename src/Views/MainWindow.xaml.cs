@@ -21,11 +21,6 @@ namespace Yatsugi.Views
             AvaloniaXamlLoader.Load(this);
         }
 
-        public void OnWindowOpened()
-        {
-            ViewModel.OnWindowOpened(this);
-        }
-
         private void OnWindowKeyDown(object sender, KeyEventArgs e)
         {
             var userControlViewModel = ViewModel.Content as ViewModelBase;

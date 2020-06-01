@@ -24,27 +24,8 @@ namespace Yatsugi.ViewModels
 
         public MainWindowViewModel()
         {
+            ToolDataBase.LoadAll();
             MoveToStartMenu();
-        }
-
-        public override async void OnWindowOpened(MainWindow mainWindow)
-        {
-            try
-            {
-                ToolDataBase.LoadAll();
-            }
-            catch(Exception ex)
-            {
-                var msBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow(new MessageBoxStandardParams{
-                    ButtonDefinitions = ButtonEnum.Ok,
-                    ContentTitle = "Error ocurred: It seems to fail to load setting files.",
-                    ContentMessage = ex.ToString(),
-                    Icon = Icon.Error,
-                    Style = Style.MacOs
-                });
-                await msBoxStandardWindow.ShowDialog(mainWindow);
-                throw ex;
-            }
         }
 
         public void MoveToStartMenu()

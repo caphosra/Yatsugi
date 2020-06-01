@@ -8,6 +8,8 @@ namespace Yatsugi
 {
     public class App : Application
     {
+        public MainWindow Window { get; private set; }
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -20,8 +22,8 @@ namespace Yatsugi
                 var mainWindow = new MainWindow {
                     DataContext = new MainWindowViewModel()
                 };
-                mainWindow.OnWindowOpened();
                 desktop.MainWindow = mainWindow;
+                Window = mainWindow;
             }
 
             base.OnFrameworkInitializationCompleted();
