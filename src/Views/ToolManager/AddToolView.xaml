@@ -16,7 +16,6 @@
         </DockPanel>
         <DockPanel DockPanel.Dock="Bottom">
             <Button DockPanel.Dock="Left" Classes="Action SmallButton" Command="{Binding OnSaveButtonClicked}">保存</Button>
-            <Button DockPanel.Dock="Left" IsVisible="{Binding IsNewTool}" Classes="Action SmallButton" Command="{Binding OnDeleteButtonClicked}">削除</Button>
             <Button DockPanel.Dock="Left" Classes="Action SmallButton" Command="{Binding OnBackButtonClicked}">戻る</Button>
         </DockPanel>
     </DockPanel>

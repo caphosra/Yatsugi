@@ -44,14 +44,17 @@ namespace Yatsugi.ViewModels
 
         public ReactiveCommand<Unit, Unit> OnBackButtonClicked { get; set; }
 
-        public ReactiveCommand<Unit, Guid> OnDeleteButtonClicked { get; set; }
-
         public AddToolViewModel(Guid id)
         {
             if (id == Guid.Empty)
             {
                 ID = Guid.NewGuid();
                 IsNewTool = true;
+            }
+            else
+            {
+                ID = id;
+                Name = ToolDataBase.Tools.Single((tool) => tool.ID == id).Name;
             }
 
             OnSaveButtonClicked = ReactiveCommand.Create<Unit, LentableTool>((unit) =>
@@ -63,11 +66,6 @@ namespace Yatsugi.ViewModels
             });
 
             OnBackButtonClicked = ReactiveCommand.Create(() => { });
-
-            OnDeleteButtonClicked = ReactiveCommand.Create<Unit, Guid>((unit) =>
-            {
-                return ID;
-            });
         }
     }
 }
