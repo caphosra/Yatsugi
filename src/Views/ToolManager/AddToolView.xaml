@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="Yatsugi.Views.AddToolView">
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="{Binding AddToolViewTitle}"/>
+        <DockPanel DockPanel.Dock="Top">
+            <TextBlock DockPanel.Dock="Left" Text="ID"/>
+            <TextBlock DockPanel.Dock="Left" Text="{Binding ID}"/>
+        </DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <TextBlock DockPanel.Dock="Left" Text="Name"/>
+            <TextBox DockPanel.Dock="Left" Text="{Binding Name}"/>
+        </DockPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <Button DockPanel.Dock="Left" Classes="Action SmallButton" Command="{Binding OnSaveButtonClicked}">保存</Button>
+            <Button DockPanel.Dock="Left" IsVisible="{Binding IsNewTool}" Classes="Action SmallButton" Command="{Binding OnDeleteButtonClicked}">削除</Button>
+            <Button DockPanel.Dock="Left" Classes="Action SmallButton" Command="{Binding OnBackButtonClicked}">戻る</Button>
+        </DockPanel>
+    </DockPanel>
+</UserControl>
