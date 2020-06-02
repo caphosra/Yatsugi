@@ -52,6 +52,12 @@ namespace Yatsugi.ViewModels
                 {
                     MoveToAddTool(guid);
                 });
+            viewModel.OnHistoryButtonClicked
+                .Take(1)
+                .Subscribe((guid) =>
+                {
+                    MoveToHistory(guid);
+                });
             viewModel.OnDeleteButtonClicked
                 .Take(1)
                 .Subscribe(async (guid) =>
@@ -93,6 +99,18 @@ namespace Yatsugi.ViewModels
 
                     MoveToToolList();
                 });
+            viewModel.OnBackButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToToolList();
+                });
+            Content = viewModel;
+        }
+
+        public void MoveToHistory(Guid id)
+        {
+            var viewModel = new HistoryViewModel(id);
             viewModel.OnBackButtonClicked
                 .Take(1)
                 .Subscribe((unit) =>
