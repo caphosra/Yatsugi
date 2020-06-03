@@ -43,6 +43,45 @@ namespace Yatsugi.ViewModels
         public void MoveToGroupList()
         {
             var viewModel = new GroupListViewModel();
+            viewModel.OnAddButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToAddGroup(Guid.Empty);
+                });
+            viewModel.OnManageButtonClicked
+                .Take(1)
+                .Subscribe((guid) =>
+                {
+                    MoveToAddGroup(guid);
+                });
+            viewModel.OnBackButtonClicked
+                .Take(1)
+                .InvokeCommand(OnBackButtonClicked);
+            Content = viewModel;
+        }
+
+        public void MoveToAddGroup(Guid id)
+        {
+            var viewModel = new AddGroupViewModel(id);
+            viewModel.OnSaveButtonClicked
+                .Take(1)
+                .Subscribe((group) =>
+                {
+                    ToolDataBase.Groups = ToolDataBase.Groups
+                        .Where((item) => item.ID != group.ID)
+                        .ToList();
+                    ToolDataBase.Groups.Add(group);
+                    ToolDataBase.RecordAll();
+
+                    MoveToGroupList();
+                });
+            viewModel.OnBackButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToGroupList();
+                });
             Content = viewModel;
         }
     }
