@@ -17,7 +17,7 @@ namespace Yatsugi.ViewModels
 {
     public class HistoryViewModel : ViewModelBase
     {
-        public List<MyString> History { get; set; }
+        public List<MyString> History { get; set; } = new List<MyString>();
         public ReactiveCommand<Unit, Unit> OnBackButtonClicked { get; set; }
 
         public HistoryViewModel(Guid id)

@@ -4,6 +4,7 @@ using System.IO;
 using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 using Avalonia.Data.Converters;
 using Avalonia.Input;
@@ -50,10 +51,12 @@ namespace Yatsugi.ViewModels
 
         public bool LentButtonEnabled => ScannedGroup != null && ScannedTool != null;
 
+        public ReactiveCommand<Unit, (LentGroup group, LentableTool tool)> OnLentButtonClicked { get; set; }
         public ReactiveCommand<Unit, Unit> OnBackButtonClicked { get; set; }
 
         public LentViewModel()
         {
+            OnLentButtonClicked = ReactiveCommand.Create<Unit, (LentGroup, LentableTool)>((unit) => (ScannedGroup, ScannedTool));
             OnBackButtonClicked = ReactiveCommand.Create(() => { });
         }
 
@@ -61,35 +64,25 @@ namespace Yatsugi.ViewModels
         {
             LogWriter.Write($"Recieved \"{input}\"");
 
-            if (!Guid.TryParse(input, out Guid guid))
+            if (Guid.TryParse(input, out Guid guid))
             {
-                return;
-            }
-
-            foreach (var tool in ToolDataBase.Tools)
-            {
-                if (tool.ID == guid)
+                foreach (var tool in ToolDataBase.Tools)
                 {
-                    ScannedTool = tool;
-                    return;
+                    if (tool.ID == guid)
+                    {
+                        ScannedTool = tool;
+                        return;
+                    }
                 }
-            }
 
-            foreach (var group in ToolDataBase.Groups)
-            {
-                if (group.ID == guid)
+                foreach (var group in ToolDataBase.Groups)
                 {
-                    ScannedGroup = group;
-                    return;
+                    if (group.ID == guid)
+                    {
+                        ScannedGroup = group;
+                        return;
+                    }
                 }
-            }
-        }
-
-        public void OnLentButtonClicked()
-        {
-            if (ScannedGroup == null || ScannedTool == null)
-            {
-
             }
         }
 

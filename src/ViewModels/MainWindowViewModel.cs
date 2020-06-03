@@ -67,6 +67,20 @@ namespace Yatsugi.ViewModels
         public void MoveToLentView()
         {
             var lentView = new LentViewModel();
+            lentView.OnLentButtonClicked
+                .Take(1)
+                .Subscribe((item) =>
+                {
+                    item.tool.History.Add(new LentRecord()
+                    {
+                        Start = DateTime.Now,
+                        Group = item.group,
+                        End = null
+                    });
+                    ToolDataBase.RecordAll();
+
+                    MoveToStartMenu();
+                });
             lentView.OnBackButtonClicked
                 .Take(1)
                 .Subscribe((unit) =>
