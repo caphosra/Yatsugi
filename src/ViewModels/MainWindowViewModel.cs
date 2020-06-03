@@ -43,11 +43,17 @@ namespace Yatsugi.ViewModels
                 {
                     MoveToReturnView();
                 });
-            startMenu.OnManageButtonClicked
+            startMenu.OnToolManageButtonClicked
                 .Take(1)
                 .Subscribe((unit) =>
                 {
                     MoveToToolManagerView();
+                });
+            startMenu.OnGroupManageButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToGroupManagerView();
                 });
             startMenu.OnSettingKeyDown
                 .Take(1)
@@ -72,7 +78,14 @@ namespace Yatsugi.ViewModels
 
         public void MoveToReturnView()
         {
-            Content = new ReturnViewModel();
+            var viewModel = new ReturnViewModel();
+            viewModel.OnBackButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToStartMenu();
+                });
+            Content = viewModel;
         }
 
         public void MoveToToolManagerView()
@@ -85,6 +98,18 @@ namespace Yatsugi.ViewModels
                     MoveToStartMenu();
                 });
             Content = toolManagerViewModel;
+        }
+
+        public void MoveToGroupManagerView()
+        {
+            var viewModel = new GroupManagerViewModel();
+            viewModel.OnBackButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToStartMenu();
+                });
+            Content = viewModel;
         }
 
         public void MoveToUserSettings()

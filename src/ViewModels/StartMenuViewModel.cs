@@ -11,14 +11,16 @@ namespace Yatsugi.ViewModels
     {
         public ReactiveCommand<Unit, Unit> OnLentButtonClicked { get; set; }
         public ReactiveCommand<Unit, Unit> OnReturnButtonClicked { get; set; }
-        public ReactiveCommand<Unit, Unit> OnManageButtonClicked { get; set; }
+        public ReactiveCommand<Unit, Unit> OnToolManageButtonClicked { get; set; }
+        public ReactiveCommand<Unit, Unit> OnGroupManageButtonClicked { get; set; }
         public ReactiveCommand<Unit, Unit> OnSettingKeyDown { get; set; }
 
         public StartMenuViewModel()
         {
             OnLentButtonClicked = ReactiveCommand.Create(() => { });
             OnReturnButtonClicked = ReactiveCommand.Create(() => { });
-            OnManageButtonClicked = ReactiveCommand.Create(() => { });
+            OnToolManageButtonClicked = ReactiveCommand.Create(() => { });
+            OnGroupManageButtonClicked = ReactiveCommand.Create(() => { });
             OnSettingKeyDown = ReactiveCommand.Create(() => { });
         }
 
