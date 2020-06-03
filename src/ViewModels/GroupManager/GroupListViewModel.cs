@@ -18,7 +18,6 @@ namespace Yatsugi.ViewModels
     {
         public ReactiveCommand<Unit, Unit> OnAddButtonClicked { get; set; }
         public ReactiveCommand<Guid, Guid> OnManageButtonClicked { get; set; }
-        public ReactiveCommand<Guid, Guid> OnHistoryButtonClicked { get; set; }
         public ReactiveCommand<Guid, Guid> OnQRCodeButtonClicked { get; set; }
         public ReactiveCommand<Guid, Guid> OnDeleteButtonClicked { get; set; }
         public ReactiveCommand<Unit, Unit> OnBackButtonClicked { get; set; }
@@ -29,7 +28,6 @@ namespace Yatsugi.ViewModels
         {
             OnAddButtonClicked = ReactiveCommand.Create(() => { });
             OnManageButtonClicked = ReactiveCommand.Create<Guid, Guid>((guid) => guid);
-            OnHistoryButtonClicked = ReactiveCommand.Create<Guid, Guid>((guid) => guid);
             OnQRCodeButtonClicked = ReactiveCommand.Create<Guid, Guid>((guid) => guid);
             OnDeleteButtonClicked = ReactiveCommand.Create<Guid, Guid>((guid) => guid);
             OnBackButtonClicked = ReactiveCommand.Create(() => { });
@@ -40,8 +38,6 @@ namespace Yatsugi.ViewModels
                     var item = new RenderableGroup(group);
                     item.OnManageButtonClicked
                         .InvokeCommand(OnManageButtonClicked);
-                    item.OnHistoryButtonClicked
-                        .InvokeCommand(OnHistoryButtonClicked);
                     item.OnQRCodeButtonClicked
                         .InvokeCommand(OnQRCodeButtonClicked);
                     item.OnDeleteButtonClicked
@@ -59,7 +55,6 @@ namespace Yatsugi.ViewModels
             public bool RentNow { get; set; }
 
             public ReactiveCommand<Unit, Guid> OnManageButtonClicked { get; set; }
-            public ReactiveCommand<Unit, Guid> OnHistoryButtonClicked { get; set; }
             public ReactiveCommand<Unit, Guid> OnQRCodeButtonClicked { get; set; }
             public ReactiveCommand<Unit, Guid> OnDeleteButtonClicked { get; set; }
 
@@ -71,10 +66,6 @@ namespace Yatsugi.ViewModels
                     .Any((tool) => tool.History.Any((record) => record.End == null && record.Group.ID == group.ID));
 
                 OnManageButtonClicked = ReactiveCommand.Create<Unit, Guid>((unit) =>
-                {
-                    return group.ID;
-                });
-                OnHistoryButtonClicked = ReactiveCommand.Create<Unit, Guid>((unit) =>
                 {
                     return group.ID;
                 });
