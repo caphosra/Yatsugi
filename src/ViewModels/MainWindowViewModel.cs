@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Linq;
 
 using MessageBox.Avalonia.DTO;
 using MessageBox.Avalonia.Enums;
@@ -93,6 +94,24 @@ namespace Yatsugi.ViewModels
         public void MoveToReturnView()
         {
             var viewModel = new ReturnViewModel();
+            viewModel.OnReturnButtonClicked
+                .Take(1)
+                .Subscribe((tool) =>
+                {
+                    tool.History = tool.History
+                        .Select((record) =>
+                        {
+                            if (record.End == null)
+                            {
+                                record.End = DateTime.Now;
+                            }
+                            return record;
+                        })
+                        .ToList();
+                    ToolDataBase.RecordAll();
+
+                    MoveToStartMenu();
+                });
             viewModel.OnBackButtonClicked
                 .Take(1)
                 .Subscribe((unit) =>

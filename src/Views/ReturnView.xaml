@@ -29,7 +29,7 @@
                 <TextBlock DockPanel.Dock="Left" Classes="NameText" Text="{Binding ScannedToolName}"/>
             </DockPanel>
             <DockPanel>
-                 <Button DockPanel.Dock="Left" Classes="Action SmallButton" IsEnabled="{Binding LentButtonEnabled}" Command="{Binding OnLentButtonClicked}">返却</Button>
+                 <Button DockPanel.Dock="Left" Classes="Action SmallButton" IsEnabled="{Binding ReturnButtonEnabled}" Command="{Binding OnReturnButtonClicked}">返却</Button>
                  <Button DockPanel.Dock="Left" Classes="Action SmallButton" Command="{Binding OnBackButtonClicked}">戻る</Button>
             </DockPanel>
         </StackPanel>

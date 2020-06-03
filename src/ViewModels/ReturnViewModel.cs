@@ -25,7 +25,7 @@ namespace Yatsugi.ViewModels
                 scannedTool = value;
                 this.RaisePropertyChanged("ScannedToolName");
                 this.RaisePropertyChanged("StatusImageUrl");
-                this.RaisePropertyChanged("LentButtonEnabled");
+                this.RaisePropertyChanged("ReturnButtonEnabled");
             }
         }
 
@@ -33,12 +33,14 @@ namespace Yatsugi.ViewModels
 
         public string StatusImageUrl => ScannedTool == null ? "resm:Yatsugi.Assets.Loading.gif" : "resm:Yatsugi.Assets.OKCheck.gif";
 
-        public bool LentButtonEnabled => ScannedTool != null;
+        public bool ReturnButtonEnabled => ScannedTool != null;
 
+        public ReactiveCommand<Unit, LentableTool> OnReturnButtonClicked { get; set; }
         public ReactiveCommand<Unit, Unit> OnBackButtonClicked { get; set; }
 
         public ReturnViewModel()
         {
+            OnReturnButtonClicked = ReactiveCommand.Create<Unit, LentableTool>((unit) => ScannedTool);
             OnBackButtonClicked = ReactiveCommand.Create(() => { });
         }
 
@@ -58,14 +60,6 @@ namespace Yatsugi.ViewModels
                     ScannedTool = tool;
                     return;
                 }
-            }
-        }
-
-        public void OnLentButtonClicked()
-        {
-            if (ScannedTool == null)
-            {
-
             }
         }
 
