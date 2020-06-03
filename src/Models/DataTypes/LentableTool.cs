@@ -42,6 +42,27 @@ namespace Yatsugi.Models.DataTypes
         public bool IsLentNow
             => History.Any(record => record.End == null);
 
+        /// <summary>
+        ///
+        /// The name of the group tool lent.
+        ///
+        /// </summary>
+        public string RentTo
+        {
+            get
+            {
+                var record = History.LastOrDefault();
+                if (record == null || record.End != null)
+                {
+                    return "返却済み";
+                }
+                else
+                {
+                    return record.Group.Name;
+                }
+            }
+        }
+
         public override string ToString()
         {
             var sb = new StringBuilder();

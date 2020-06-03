@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Linq;
 
+using MessageBox.Avalonia.DTO;
+using MessageBox.Avalonia.Enums;
 using ReactiveUI;
 
+using Yatsugi.Views;
 using Yatsugi.Models;
 using Yatsugi.Models.DataTypes;
 
@@ -13,7 +17,6 @@ namespace Yatsugi.ViewModels
         public UserSettings Settings { get; set; }
 
         private ViewModelBase content;
-
         public ViewModelBase Content
         {
             get => content;
@@ -23,39 +26,41 @@ namespace Yatsugi.ViewModels
         public MainWindowViewModel()
         {
             ToolDataBase.LoadAll();
-            MoveToMainMenu();
+            MoveToStartMenu();
         }
 
-        public void MoveToMainMenu()
+        public void MoveToStartMenu()
         {
             var startMenu = new StartMenuViewModel();
-            startMenu.OnMoveUserControl
+            startMenu.OnLentButtonClicked
                 .Take(1)
-                .Subscribe((eventType) =>
+                .Subscribe((unit) =>
                 {
-                    switch (eventType)
-                    {
-                        case StartMenuViewEvents.ON_LENT_BUTTON_CLICKED:
-                            {
-                                MoveToLentView();
-                            }
-                            break;
-                        case StartMenuViewEvents.ON_RETURN_BUTTON_CLICKED:
-                            {
-                                MoveToReturnView();
-                            }
-                            break;
-                        case StartMenuViewEvents.ON_MANAGE_BUTTON_CLICKED:
-                            {
-                                MoveToToolManagerView();
-                            }
-                            break;
-                        case StartMenuViewEvents.ON_SETTINGS_KEY_PUSHED:
-                            {
-                                MoveToUserSettings();
-                            }
-                            break;
-                    }
+                    MoveToLentView();
+                });
+            startMenu.OnReturnButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToReturnView();
+                });
+            startMenu.OnToolManageButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToToolManagerView();
+                });
+            startMenu.OnGroupManageButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToGroupManagerView();
+                });
+            startMenu.OnSettingKeyDown
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToUserSettings();
                 });
             Content = startMenu;
         }
@@ -63,23 +68,81 @@ namespace Yatsugi.ViewModels
         public void MoveToLentView()
         {
             var lentView = new LentViewModel();
-            lentView.OnMoveToStartMenu
+            lentView.OnLentButtonClicked
+                .Take(1)
+                .Subscribe((item) =>
+                {
+                    item.tool.History.Add(new LentRecord()
+                    {
+                        Start = DateTime.Now,
+                        Group = item.group,
+                        End = null
+                    });
+                    ToolDataBase.RecordAll();
+
+                    MoveToStartMenu();
+                });
+            lentView.OnBackButtonClicked
                 .Take(1)
                 .Subscribe((unit) =>
                 {
-                    MoveToMainMenu();
+                    MoveToStartMenu();
                 });
             Content = lentView;
         }
 
         public void MoveToReturnView()
         {
-            Content = new ReturnViewModel();
+            var viewModel = new ReturnViewModel();
+            viewModel.OnReturnButtonClicked
+                .Take(1)
+                .Subscribe((tool) =>
+                {
+                    tool.History = tool.History
+                        .Select((record) =>
+                        {
+                            if (record.End == null)
+                            {
+                                record.End = DateTime.Now;
+                            }
+                            return record;
+                        })
+                        .ToList();
+                    ToolDataBase.RecordAll();
+
+                    MoveToStartMenu();
+                });
+            viewModel.OnBackButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToStartMenu();
+                });
+            Content = viewModel;
         }
 
         public void MoveToToolManagerView()
         {
-            Content = new ToolManagerViewModel();
+            var toolManagerViewModel = new ToolManagerViewModel();
+            toolManagerViewModel.OnBackButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToStartMenu();
+                });
+            Content = toolManagerViewModel;
+        }
+
+        public void MoveToGroupManagerView()
+        {
+            var viewModel = new GroupManagerViewModel();
+            viewModel.OnBackButtonClicked
+                .Take(1)
+                .Subscribe((unit) =>
+                {
+                    MoveToStartMenu();
+                });
+            Content = viewModel;
         }
 
         public void MoveToUserSettings()

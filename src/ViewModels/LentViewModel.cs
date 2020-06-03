@@ -4,7 +4,9 @@ using System.IO;
 using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
+using Avalonia.Data.Converters;
 using Avalonia.Input;
 using ReactiveUI;
 
@@ -15,9 +17,31 @@ namespace Yatsugi.ViewModels
 {
     public class LentViewModel : ViewModelBase
     {
-        public LentGroup ScannedGroup { get; set; }
+        private LentGroup scannedGroup;
+        public LentGroup ScannedGroup
+        {
+            get => scannedGroup;
+            set
+            {
+                scannedGroup = value;
+                this.RaisePropertyChanged("ScannedGroupName");
+                this.RaisePropertyChanged("StatusImageUrl");
+                this.RaisePropertyChanged("LentButtonEnabled");
+            }
+        }
 
-        public LentableTool ScannedTool { get; set; }
+        private LentableTool scannedTool;
+        public LentableTool ScannedTool
+        {
+            get => scannedTool;
+            set
+            {
+                scannedTool = value;
+                this.RaisePropertyChanged("ScannedToolName");
+                this.RaisePropertyChanged("StatusImageUrl");
+                this.RaisePropertyChanged("LentButtonEnabled");
+            }
+        }
 
         public string ScannedGroupName => ScannedGroup != null ? ScannedGroup.Name : "Waiting for scan...";
 
@@ -27,48 +51,38 @@ namespace Yatsugi.ViewModels
 
         public bool LentButtonEnabled => ScannedGroup != null && ScannedTool != null;
 
-        public ReactiveCommand<Unit, Unit> OnMoveToStartMenu { get; set; }
+        public ReactiveCommand<Unit, (LentGroup group, LentableTool tool)> OnLentButtonClicked { get; set; }
+        public ReactiveCommand<Unit, Unit> OnBackButtonClicked { get; set; }
 
         public LentViewModel()
         {
-            OnMoveToStartMenu = ReactiveCommand.Create<Unit, Unit>(unit => unit);
+            OnLentButtonClicked = ReactiveCommand.Create<Unit, (LentGroup, LentableTool)>((unit) => (ScannedGroup, ScannedTool));
+            OnBackButtonClicked = ReactiveCommand.Create(() => { });
         }
 
         public void OnBarcodeInput(string input)
         {
             LogWriter.Write($"Recieved \"{input}\"");
 
-            if (!Guid.TryParse(input, out Guid guid))
+            if (Guid.TryParse(input, out Guid guid))
             {
-                return;
-            }
-
-            foreach (var tool in ToolDataBase.Tools)
-            {
-                if (tool.ID == guid)
+                foreach (var tool in ToolDataBase.Tools)
                 {
-                    ScannedTool = tool;
-                    RepaintAll();
-                    return;
+                    if (tool.ID == guid)
+                    {
+                        ScannedTool = tool;
+                        return;
+                    }
                 }
-            }
 
-            foreach (var group in ToolDataBase.Groups)
-            {
-                if (group.ID == guid)
+                foreach (var group in ToolDataBase.Groups)
                 {
-                    ScannedGroup = group;
-                    RepaintAll();
-                    return;
+                    if (group.ID == guid)
+                    {
+                        ScannedGroup = group;
+                        return;
+                    }
                 }
-            }
-        }
-
-        public void OnLentButtonClicked()
-        {
-            if (ScannedGroup == null || ScannedTool == null)
-            {
-
             }
         }
 
@@ -81,32 +95,17 @@ namespace Yatsugi.ViewModels
                 OnBarcodeInput(InputText.ToString());
                 InputText = new StringBuilder();
             }
-            else if (e.Key == Key.Escape)
-            {
-                OnMoveToStartMenu
-                    .Execute()
-                    .Subscribe();
-            }
             else if (e.Key == Key.F11)
             {
                 ScannedGroup = new LentGroup();
                 ScannedGroup.Name = "TestGroup";
                 ScannedTool = new LentableTool();
                 ScannedTool.Name = "TestTool";
-                RepaintAll();
             }
             else
             {
                 InputText.Append(e.Key.ConvertToString());
             }
-        }
-
-        public void RepaintAll()
-        {
-            this.RaisePropertyChanged("ScannedGroupName");
-            this.RaisePropertyChanged("ScannedToolName");
-            this.RaisePropertyChanged("StatusImageUrl");
-            this.RaisePropertyChanged("LentButtonEnabled");
         }
     }
 }

@@ -104,6 +104,23 @@ namespace Yatsugi.Models
             }
         }
 
+        public static void DeleteTool(Guid id, bool throwWhenNotExists)
+        {
+            var item = Tools.SingleOrDefault(item => item.ID == id);
+            if (item != null)
+            {
+                LogWriter.Write($"Delete a tool named {item.Name}");
+
+                Tools.Remove(item);
+                var file_path = GetToolDataFilePath(item);
+                File.Delete(file_path);
+            }
+            else if (throwWhenNotExists)
+            {
+                throw new FileNotFoundException($"Not found a tool: {item.ID}");
+            }
+        }
+
         private static string GetToolDataFilePath(LentableTool tool)
             => Path.Combine(UserSettings.DataDirectory, $"tool-{tool.ID.ToString()}.csv");
     }

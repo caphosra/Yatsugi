@@ -19,10 +19,8 @@
 					</Animation>
 				</Style.Animations>
 			</Style>
-			<Style Selector="Button.SlideFromRight1">
-				<Setter Property="HorizontalAlignment" Value="Right"/>
-            	<Setter Property="VerticalAlignment" Value="Bottom"/>
-				<Setter Property="Margin" Value="60,30,50,50"/>
+			<Style Selector="Button.SlideFromRight">
+				<Setter Property="Margin" Value="60,30,50,30"/>
 				<Style.Animations>
 					<Animation Delay="0:0:1" Duration="0:0:2">
 						<KeyFrame Cue="0%">
@@ -36,46 +34,46 @@
 					</Animation>
             	</Style.Animations>
 			</Style>
-			<Style Selector="Button.SlideFromRight2">
-				<Setter Property="HorizontalAlignment" Value="Right"/>
-            	<Setter Property="VerticalAlignment" Value="Bottom"/>
-				<Setter Property="Margin" Value="50,30,50,30"/>
+			<Style Selector="Button.IconButton">
+                <Setter Property="Width" Value="80"/>
+                <Setter Property="Height" Value="80"/>
+				<Setter Property="Margin" Value="50,50"/>
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
 				<Style.Animations>
-					<Animation Delay="0:0:1.2" Duration="0:0:2">
+					<Animation Delay="0:0:1" Duration="0:0:2">
 						<KeyFrame Cue="0%">
 							<Setter Property="Opacity" Value="0.0"/>
-							<Setter Property="TranslateTransform.X" Value="40.0"/>
+							<Setter Property="TranslateTransform.Y" Value="40.0"/>
 						</KeyFrame>
 						<KeyFrame Cue="100%">
 							<Setter Property="Opacity" Value="1.0"/>
-							<Setter Property="TranslateTransform.X" Value="0.0"/>
+							<Setter Property="TranslateTransform.Y" Value="0.0"/>
 						</KeyFrame>
 					</Animation>
             	</Style.Animations>
-			</Style>
-			<Style Selector="Button.SlideFromRight3">
-				<Setter Property="HorizontalAlignment" Value="Right"/>
-            	<Setter Property="VerticalAlignment" Value="Bottom"/>
-				<Setter Property="Margin" Value="40,30,50,30"/>
-				<Style.Animations>
-					<Animation Delay="0:0:1.4" Duration="0:0:2">
-						<KeyFrame Cue="0%">
-							<Setter Property="Opacity" Value="0.0"/>
-							<Setter Property="TranslateTransform.X" Value="40.0"/>
-						</KeyFrame>
-						<KeyFrame Cue="100%">
-							<Setter Property="Opacity" Value="1.0"/>
-							<Setter Property="TranslateTransform.X" Value="0.0"/>
-						</KeyFrame>
-					</Animation>
-            	</Style.Animations>
-			</Style>
+            </Style>
 		</DockPanel.Styles>
 		<TextBlock DockPanel.Dock="Left" Classes="Title">Welcome to Yatsugi</TextBlock>
 		<StackPanel DockPanel.Dock="Right">
-			<Button Classes="Action SlideFromRight1" Command="{Binding OnLentButtonClicked}">貸出</Button>
-			<Button Classes="Action SlideFromRight2" Command="{Binding OnReturnButtonClicked}">返却</Button>
-			<Button Classes="Action SlideFromRight3" Command="{Binding OnManageButtonClicked}">管理</Button>
+			<Button Classes="Action SlideFromRight" Command="{Binding OnLentButtonClicked}">貸出</Button>
+			<Button Classes="Action SlideFromRight" Command="{Binding OnReturnButtonClicked}">返却</Button>
+			<DockPanel>
+				<Button DockPanel.Dock="Right" Classes="IconButton" Command="{Binding OnGroupManageButtonClicked}">
+					<DrawingPresenter Width="64" Height="64">
+						<DrawingPresenter.Drawing>
+							<GeometryDrawing Brush="#FF000000" Geometry="M250 625C250 562.5 250 312.5 250 312.5C250 312.5 250.2 298.4 257.5 281.3C192.5 281.3 125 281.3 125 281.3C125 281.3 62.5 281.3 62.5 343.8V562.5C62.5 625 125 625 125 625V937.5H312.5V687.5C312.5 687.5 250 687.5 250 625ZM250 250C266.3 250 281.3 245.5 294.6 238.3C296.4 237.1 298.5 236.1 300.5 235C326.4 218.4 343.8 189.4 343.8 156.3C343.8 104.5 301.8 62.5 250 62.5C198.2 62.5 156.3 104.5 156.3 156.3C156.3 208 198.2 250 250 250ZM875 281.3H742.6C749.8 298.4 750 312.5 750 312.5C750 312.5 750 562.5 750 625C750 687.5 687.5 687.5 687.5 687.5V937.5H875V625C875 625 937.5 625 937.5 562.5C937.5 500 937.5 343.8 937.5 343.8C937.5 343.8 937.5 281.3 875 281.3ZM699.4 235C701.4 236.1 703.6 237.1 705.4 238.3C718.8 245.5 733.8 250 750 250C801.8 250 843.8 208 843.8 156.3C843.8 104.5 801.8 62.5 750 62.5C698.2 62.5 656.3 104.5 656.3 156.3C656.3 189.3 673.5 218.3 699.4 235ZM500 250C551.8 250 593.8 208 593.8 156.3C593.8 104.5 551.8 62.5 500 62.5C448.2 62.5 406.3 104.5 406.3 156.3C406.3 208 448.2 250 500 250ZM687.5 343.8C687.5 343.8 687.5 281.3 625 281.3C609.4 281.3 375 281.3 375 281.3C375 281.3 312.5 281.3 312.5 343.8V562.5C312.5 625 375 625 375 625V937.5H625V625C625 625 687.5 625 687.5 562.5C687.5 500 687.5 343.8 687.5 343.8Z"/>
+						</DrawingPresenter.Drawing>
+					</DrawingPresenter>
+				</Button>
+				<Button DockPanel.Dock="Right" Classes="IconButton" Command="{Binding OnToolManageButtonClicked}">
+					<DrawingPresenter Width="64" Height="64">
+						<DrawingPresenter.Drawing>
+							<GeometryDrawing Brush="#FF000000" Geometry="M502.63 214.63l-45.25-45.25c-6-6-14.14-9.37-22.63-9.37H384V80c0-26.51-21.49-48-48-48H176c-26.51 0-48 21.49-48 48v80H77.25c-8.49 0-16.62 3.37-22.63 9.37L9.37 214.63c-6 6-9.37 14.14-9.37 22.63V320h128v-16c0-8.84 7.16-16 16-16h32c8.84 0 16 7.16 16 16v16h128v-16c0-8.84 7.16-16 16-16h32c8.84 0 16 7.16 16 16v16h128v-82.75c0-8.48-3.37-16.62-9.37-22.62zM320 160H192V96h128v64zm64 208c0 8.84-7.16 16-16 16h-32c-8.84 0-16-7.16-16-16v-16H192v16c0 8.84-7.16 16-16 16h-32c-8.84 0-16-7.16-16-16v-16H0v96c0 17.67 14.33 32 32 32h448c17.67 0 32-14.33 32-32v-96H384v16z"/>
+						</DrawingPresenter.Drawing>
+					</DrawingPresenter>
+				</Button>
+			</DockPanel>
 		</StackPanel>
 	</DockPanel>
 </UserControl>
