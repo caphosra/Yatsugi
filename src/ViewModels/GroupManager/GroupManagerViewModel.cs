@@ -58,6 +58,30 @@ namespace Yatsugi.ViewModels
             viewModel.OnQRCodeButtonClicked
                 .Take(1)
                 .Subscribe(OnGenerateQRCodeButtonClicked);
+            viewModel.OnDeleteButtonClicked
+                .Take(1)
+                .Subscribe(async (guid) =>
+                {
+                    var msBoxStandardWindow = MessageBoxManager.GetMessageBoxStandardWindow(new MessageBoxStandardParams
+                    {
+                        ButtonDefinitions = ButtonEnum.OkCancel,
+                        ContentTitle = "団体の削除",
+                        ContentMessage = "本当に削除しますか? この操作を取り消すことは出来ませんよ! 開発者は責任取らないからね!!!",
+                        Icon = Icon.Warning,
+                        Style = Style.MacOs
+                    });
+                    var result = await msBoxStandardWindow.ShowDialog((App.Current as App).Window);
+
+                    if (result == ButtonResult.Ok)
+                    {
+                        ToolDataBase.Groups = ToolDataBase.Groups
+                            .Where((group) => group.ID != guid)
+                            .ToList();
+                        ToolDataBase.RecordAll();
+                    }
+
+                    MoveToGroupList();
+                });
             viewModel.OnBackButtonClicked
                 .Take(1)
                 .InvokeCommand(OnBackButtonClicked);

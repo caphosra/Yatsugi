@@ -71,7 +71,7 @@ namespace Yatsugi.ViewModels
                     var msBoxStandardWindow = MessageBoxManager.GetMessageBoxStandardWindow(new MessageBoxStandardParams
                     {
                         ButtonDefinitions = ButtonEnum.OkCancel,
-                        ContentTitle = "Error ocurred: It seems to fail to load setting files.",
+                        ContentTitle = "器材の削除",
                         ContentMessage = "本当に削除しますか? この操作を取り消すことは出来ませんよ! 開発者は責任取らないからね!!!",
                         Icon = Icon.Warning,
                         Style = Style.MacOs
