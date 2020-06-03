@@ -55,6 +55,9 @@ namespace Yatsugi.ViewModels
                 {
                     MoveToAddGroup(guid);
                 });
+            viewModel.OnQRCodeButtonClicked
+                .Take(1)
+                .Subscribe(OnGenerateQRCodeButtonClicked);
             viewModel.OnBackButtonClicked
                 .Take(1)
                 .InvokeCommand(OnBackButtonClicked);
@@ -83,6 +86,28 @@ namespace Yatsugi.ViewModels
                     MoveToGroupList();
                 });
             Content = viewModel;
+        }
+
+        public async void OnGenerateQRCodeButtonClicked(Guid id)
+        {
+            var group = ToolDataBase.Groups
+                .Single((group) => group.ID == id);
+
+            var dialog = new SaveFileDialog();
+            dialog.InitialFileName = $"{group.Name}-QRCode.jpg";
+            dialog.Directory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            var path = await dialog.ShowAsync((App.Current as App).Window);
+
+            if (path != null)
+            {
+                var qrGenerator = new QRCodeGenerator();
+                var qrCodeData = qrGenerator.CreateQrCode("The text which should be encoded.", QRCodeGenerator.ECCLevel.Q);
+                var qrCode = new QRCode(qrCodeData);
+                var qrCodeImage = qrCode.GetGraphic(20);
+                qrCodeImage.Save(path, ImageFormat.Jpeg);
+            }
+
+            MoveToGroupList();
         }
     }
 }
