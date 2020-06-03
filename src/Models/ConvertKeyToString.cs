@@ -15,7 +15,7 @@ namespace Yatsugi.Models
         {
             switch (key)
             {
-                case Key.OemMinus:
+                case Key.Subtract:
                     return "-";
                 // Integer
                 case Key k when ((int)Key.D0 <= (int)k && (int)k <= (int)Key.D9):

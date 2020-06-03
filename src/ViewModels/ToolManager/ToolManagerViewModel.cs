@@ -139,7 +139,7 @@ namespace Yatsugi.ViewModels
             if (path != null)
             {
                 var qrGenerator = new QRCodeGenerator();
-                var qrCodeData = qrGenerator.CreateQrCode("The text which should be encoded.", QRCodeGenerator.ECCLevel.Q);
+                var qrCodeData = qrGenerator.CreateQrCode(id.ToString(), QRCodeGenerator.ECCLevel.Q);
                 var qrCode = new QRCode(qrCodeData);
                 var qrCodeImage = qrCode.GetGraphic(20);
                 qrCodeImage.Save(path, ImageFormat.Jpeg);
