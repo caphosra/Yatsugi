@@ -2,7 +2,6 @@
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>netcoreapp3.0</TargetFramework>
-        <PublishSingleFile>true</PublishSingleFile>
     </PropertyGroup>
     <ItemGroup>
         <Folder Include="Models\" />

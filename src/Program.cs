@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -16,6 +17,12 @@ namespace Yatsugi
         // yet and stuff might break.
         public static void Main(string[] args)
         {
+            var names = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+            foreach(var name in names)
+            {
+                LogWriter.Write($"Assembly {name}");
+            }
+
             try
             {
                 BuildAvaloniaApp()
