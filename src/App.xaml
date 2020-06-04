@@ -20,7 +20,7 @@
             <Setter Property="VerticalAlignment" Value="Bottom"/>
             <Setter Property="Background">
                 <Setter.Value>
-                    <ImageBrush Source="/Assets/ButtonBar.png"/>
+                    <ImageBrush Source="resm:Yatsugi.Assets.ButtonBar.png"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="BorderThickness" Value="0"/>
@@ -28,21 +28,21 @@
         <Style Selector="Button.Action:pointerover">
             <Setter Property="Background">
                 <Setter.Value>
-                    <ImageBrush Source="/Assets/ButtonBar_Hover.png"/>
+                    <ImageBrush Source="resm:Yatsugi.Assets.ButtonBar_Hover.png"/>
                 </Setter.Value>
             </Setter>
         </Style>
         <Style Selector="Button.Action:pressed /template/ ContentPresenter">
             <Setter Property="Background">
                 <Setter.Value>
-                    <ImageBrush Source="/Assets/ButtonBar_Click.png"/>
+                    <ImageBrush Source="resm:Yatsugi.Assets.ButtonBar_Click.png"/>
                 </Setter.Value>
             </Setter>
         </Style>
         <Style Selector="Button.Action:disabled /template/ ContentPresenter">
             <Setter Property="Background">
                 <Setter.Value>
-                    <ImageBrush Source="/Assets/ButtonBar_Click.png"/>
+                    <ImageBrush Source="resm:Yatsugi.Assets.ButtonBar_Click.png"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="Opacity" Value="0.5"/>

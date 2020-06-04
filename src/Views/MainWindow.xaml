@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Width="900" Height="500"
         x:Class="Yatsugi.Views.MainWindow"
-        Icon="/Assets/icon.png"
+        Icon="resm:Yatsugi.Assets.icon.png"
         Title="Yatsugi"
         Content="{Binding Content}">
 </Window>
