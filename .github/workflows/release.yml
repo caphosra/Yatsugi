@@ -56,3 +56,5 @@ jobs:
               with:
                 upload_url: ${{ steps.create_release.outputs.upload_url }}
                 asset_path: ./src/publish/Yatsugi.exe
+                asset_name: Yatsugi.exe
+                asset_content_type: application/vnd.microsoft.portable-executable
