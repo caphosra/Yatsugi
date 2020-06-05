@@ -30,7 +30,7 @@ jobs:
 
             - name: Build app
               run: |
-                dotnet publish -r win-x64 -o publish
+                dotnet publish -r win-x64 -o publish /p:PublishSingleFile=true
               working-directory: ./src
 
             - name: Upload build artifacts
