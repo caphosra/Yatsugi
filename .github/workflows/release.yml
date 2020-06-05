@@ -1,0 +1,57 @@
+name: Release app
+
+on:
+    push:
+        tags:
+            - "*"
+
+jobs:
+    release:
+        runs-on: windows-latest
+
+        strategy:
+            matrix:
+                dotnet_version: [3.1.101]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                lfs: true
+
+            - name: Checkout LFS objects
+              run: git lfs checkout
+
+            - name: Install .NET Core
+              uses: actions/setup-dotnet@v1
+              with:
+                  dotnet-version: ${{ matrix.dotnet_version }}
+
+            - name: Build app
+              run: |
+                dotnet publish -r win-x64 -o publish /p:PublishSingleFile=true /p:PublishTrimmed=true
+              working-directory: ./src
+
+            - name: Upload build artifacts
+              uses: actions/upload-artifact@v1
+              with:
+                  name: Yatsugi for Windows
+                  path: ./src/publish
+
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ github.ref }}
+                  draft: true
+                  prerelease: false
+
+            - name: Upload Release Asset
+              uses: actions/upload-release-asset@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                upload_url: ${{ steps.create_release.outputs.upload_url }}
+                asset_path: ./src/publish/Yatsugi.exe
