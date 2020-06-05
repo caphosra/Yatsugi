@@ -12,8 +12,18 @@
             <SubType>Designer</SubType>
         </AvaloniaResource>
         <AvaloniaResource Include="Assets\**" />
-        <EmbeddedResource Include="Assets\**" />
     </ItemGroup>
+    <ItemGroup>
+      <None Remove="Assets\ButtonBar.png" />
+      <None Remove="Assets\ButtonBar_Click.png" />
+      <None Remove="Assets\ButtonBar_Hover.png" />
+      <None Remove="Assets\icon.png" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Assets\ButtonBar.png" />
+      <EmbeddedResource Include="Assets\ButtonBar_Click.png" />
+      <EmbeddedResource Include="Assets\ButtonBar_Hover.png" />
+      <EmbeddedResource Include="Assets\icon.png" />
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="0.9.6" />
         <PackageReference Include="Avalonia.Desktop" Version="0.9.6" />
