@@ -25,7 +25,7 @@ jobs:
 
             - name: Build app
               run: |
-                dotnet publish -r win10-x64 -o publish
+                dotnet publish -r win7-x64 -o publish
               working-directory: ./src
 
             - name: Upload build artifacts
