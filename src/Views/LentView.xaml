@@ -37,6 +37,6 @@
                  <Button DockPanel.Dock="Left" Classes="Action SmallButton" Command="{Binding OnBackButtonClicked}">戻る</Button>
             </DockPanel>
         </StackPanel>
-        <Image DockPanel.Dock="Left" Classes="StatusImage" Source="{Binding StatusImageUrl}"/>
+        <!--<Image DockPanel.Dock="Left" Classes="StatusImage" Source="{Binding StatusImageUrl}"/>-->
     </DockPanel>
 </UserControl>
