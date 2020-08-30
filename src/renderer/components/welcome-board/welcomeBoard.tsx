@@ -65,7 +65,7 @@ export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBo
                             <Button onClick={() => this.props.onContentsMove(Contents.GROUP_LIST)} style={buttonStyle} variant="primary">
                                 団体リスト
                             </Button>
-                            <Button style={buttonStyle} variant="primary">
+                            <Button onClick={() => this.props.onContentsMove(Contents.TOOL_LIST)} style={buttonStyle} variant="primary">
                                 器材リスト
                             </Button>
                         </SelectModePanel>

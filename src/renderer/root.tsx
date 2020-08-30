@@ -3,11 +3,13 @@ import * as React from 'react';
 import { LentTool } from "./components/lent-tool/lentTool";
 import { WelcomeBoard } from "./components/welcome-board/welcomeBoard";
 import { GroupList } from "./components/group-list/groupList";
+import { ToolList } from "./components/tool-list/toolList";
 
 export enum Contents {
     WELCOME_BOARD,
     LENT_TOOL,
-    GROUP_LIST
+    GROUP_LIST,
+    TOOL_LIST
 }
 
 export interface IRootContentProps {
@@ -44,6 +46,9 @@ export class RootContent extends React.Component<IRootContentProps, IRootContent
                 break;
             case Contents.GROUP_LIST:
                 content = <GroupList />;
+                break;
+            case Contents.TOOL_LIST:
+                content = <ToolList />;
                 break;
             default:
                 console.error("Unknown content requested.");
