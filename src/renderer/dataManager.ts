@@ -22,11 +22,27 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
         }
     }
 
+    findByID(id: string): T | null {
+        if (!this.data) {
+            this.gets();
+            return this.findByID(id);
+        }
+        else {
+            for (const item of this.data) {
+                if (item.id == id) {
+                    return item;
+                }
+            }
+            return null;
+        }
+    }
+
     add(item: T) {
         return new Promise<void>((resolve, reject) => {
             ipcRenderer.send(`database-add-${this.kind}`, item);
             ipcRenderer.on(`database-add-${this.kind}-reply`, (e, succeeded) => {
                 if (succeeded && this.data) {
+                    this.data = this.data.filter((val) => val.id != item.id);
                     this.data.push(item);
                     resolve();
                 }
