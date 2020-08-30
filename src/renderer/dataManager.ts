@@ -5,21 +5,27 @@ import { YatsugiTool } from "../lib/yatsugiTool";
 
 export class DataManager<T extends YatsugiGroup | YatsugiTool> {
     private data: T[] | undefined;
+    private kind: "group" | "tool";
+
+    constructor(kind: "group" | "tool") {
+        this.kind = kind;
+    }
 
     gets() {
         if (this.data) {
             return this.data;
         }
         else {
-            const item = ipcRenderer.sendSync(`database-get-all-${this.getText()}s`) as T[];
-            return item.map((val) => this.convertFromJson(val));
+            const item = ipcRenderer.sendSync(`database-get-all-${this.kind}s`) as T[];
+            this.data = item.map((val) => this.convertFromJson(val));
+            return this.data;
         }
     }
 
     add(item: T) {
         return new Promise<void>((resolve, reject) => {
-            ipcRenderer.send(`database-add-${this.getText()}`, item);
-            ipcRenderer.on(`database-add-${this.getText()}-reply`, (e, succeeded) => {
+            ipcRenderer.send(`database-add-${this.kind}`, item);
+            ipcRenderer.on(`database-add-${this.kind}-reply`, (e, succeeded) => {
                 if (succeeded && this.data) {
                     this.data.push(item);
                     resolve();
@@ -33,8 +39,8 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
 
     delete(itemID: string) {
         return new Promise<void>((resolve, reject) => {
-            ipcRenderer.send(`database-delete-${this.getText()}`, itemID);
-            ipcRenderer.on(`database-delete-${this.getText()}-reply`, (e, succeeded) => {
+            ipcRenderer.send(`database-delete-${this.kind}`, itemID);
+            ipcRenderer.on(`database-delete-${this.kind}-reply`, (e, succeeded) => {
                 if (succeeded && this.data) {
                     this.data = this.data.filter((val) => val.id != itemID);
                     resolve();
@@ -47,28 +53,11 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
     }
 
     private convertFromJson(item: T) {
-        if (item instanceof YatsugiGroup) {
+        if (this.kind == "group") {
             return new YatsugiGroup(item as YatsugiGroup) as T;
         }
-        else if (item instanceof YatsugiTool) {
-            return new YatsugiTool(item as YatsugiTool) as T;
-        }
         else {
-            throw "Unknown type detected.";
-        }
-    }
-
-    private getText() {
-        switch (typeof({} as T)) {
-            case typeof(YatsugiGroup): {
-                return "group";
-            }
-            case typeof(YatsugiTool): {
-                return "tool";
-            }
-            default: {
-                throw "Unknown type detected.";
-            }
+            return new YatsugiTool(item as YatsugiTool) as T;
         }
     }
 }
