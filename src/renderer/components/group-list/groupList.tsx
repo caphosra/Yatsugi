@@ -108,7 +108,7 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
             return (
                 <div>
                     <h1 style={titleStyle}>
-                        グループ一覧
+                        団体一覧
                     </h1>
                     <div onClick={this.addGroupButtonClicked} style={iconStyle}>
                         <i className="fas fa-plus fa-2x"></i>

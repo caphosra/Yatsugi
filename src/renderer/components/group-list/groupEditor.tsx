@@ -35,6 +35,7 @@ export class GroupEditor extends React.Component<IGroupEditorProps, IGroupEditor
             .catch((err) => {
                 console.error(err);
             });
+        this.saveButtonClicked = () => { };
     };
 
     cancelButtonClicked = () => {
@@ -59,7 +60,7 @@ export class GroupEditor extends React.Component<IGroupEditorProps, IGroupEditor
         return (
             <div>
                 <h1 style={titleStyle}>
-                    グループ一覧
+                    団体一覧
                 </h1>
                 <Card style={bodyStyle} body>
                     <InputGroup className="mb-3" contentEditable={false}>
