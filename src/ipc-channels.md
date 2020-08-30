@@ -1,11 +1,9 @@
 # List of IPC channels
 
-## Database
-
 Note that `database-check-*` looks for the item by id while `database-find-*` looks for the items whose names include the text given.
 
 |channel|sync|args|return|
-|:---|:---:|:---|:---|:---|
+|:---|:---:|:---|:---|
 |database-load|||boolean|
 |database-save|||boolean|
 |database-check-group|:heavy_check_mark:|string|YatsugiGroup \| null|
@@ -18,10 +16,5 @@ Note that `database-check-*` looks for the item by id while `database-find-*` lo
 |database-delete-tool||string|boolean|
 |database-get-all-groups|:heavy_check_mark:||YatsugiGroup[]|
 |database-get-all-tools|:heavy_check_mark:||YatsugiTool[]|
-
-## Utils
-
-|channel|sync|args|return|
-|:---|:---:|:---|:---|:---|
 |qrcode-save||string, string|boolean|
 |opendev||||
