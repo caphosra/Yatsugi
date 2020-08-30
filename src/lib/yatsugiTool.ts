@@ -70,7 +70,7 @@ export class YatsugiTool {
 
     static loadAllAsync() {
         return new Promise<YatsugiTool[]>((resolve, reject) => {
-            glob(path.join(app.getPath("appData"), "tool-*.csv"), (err, files) => {
+            glob(path.join(app.getPath("appData"), "yatsugi", "tool-*.csv"), (err, files) => {
                 if (err) {
                     reject(err);
                 }
