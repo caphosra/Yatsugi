@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "strict": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "target": "ES5",
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "node_modules/*"
+            ]
+        },
+        "jsx": "react",
+        "moduleResolution": "node",
+        "esModuleInterop": true
+    },
+    "include": [
+        "src/**/*"
+    ]
+}
