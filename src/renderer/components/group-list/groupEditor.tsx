@@ -2,10 +2,11 @@ import * as React from "react";
 import { Button, Card, InputGroup, FormControl } from "react-bootstrap";
 
 import { YatsugiGroup } from "../../../lib/yatsugiGroup";
-import { DataClient } from "../../dataClient";
+import { DataManager } from "../../dataManager";
 
 export interface IGroupEditorProps {
     editGroup: YatsugiGroup;
+    groups: DataManager<YatsugiGroup>;
     onFinished: (changed: boolean) => void;
 }
 
@@ -27,7 +28,7 @@ export class GroupEditor extends React.Component<IGroupEditorProps, IGroupEditor
     saveButtonClicked = () => {
         let group = this.props.editGroup;
         group.name = this.groupNameRef.current?.value ?? "no name";
-        DataClient.addGroup(group)
+        this.props.groups.add(group)
             .then(() => {
                 this.props.onFinished(true);
             })
