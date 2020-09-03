@@ -6,8 +6,7 @@ import { remote } from "electron";
 import { openQrCodeDialog } from "../../../lib/qrcodeGenerator";
 import { GroupEditor } from "./groupEditor";
 import { YatsugiGroup } from "../../../lib/yatsugiGroup";
-import { YatsugiTool } from "../../../lib/yatsugiTool";
-import { DataManager } from "../../dataManager";
+import { toolData, groupData } from "../../dataManager";
 
 export interface IGroupListProps {
 
@@ -16,9 +15,6 @@ export interface IGroupListProps {
 export interface IGroupListState {
     editMode: boolean;
     editGroup: YatsugiGroup;
-
-    tools: DataManager<YatsugiTool>;
-    groups: DataManager<YatsugiGroup>;
 }
 
 export class GroupList extends React.Component<IGroupListProps, IGroupListState> {
@@ -27,9 +23,7 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
 
         this.state = {
             editMode: false,
-            editGroup: new YatsugiGroup({ id: "", name: "" }),
-            tools: new DataManager<YatsugiTool>("tool"),
-            groups: new DataManager<YatsugiGroup>("group")
+            editGroup: new YatsugiGroup({ id: "", name: "" })
         };
     }
 
@@ -60,11 +54,9 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
             buttons: ["OK", "Cancel"]
         }).then((val) => {
             if (val.response == 0) {
-                this.state.groups.delete(id)
+                groupData.delete(id)
                     .then(() => {
-                        this.setState({
-                            groups: this.state.groups
-                        });
+                        this.forceUpdate();
                     })
                     .catch((err) => {
                         console.error(err);
@@ -75,14 +67,13 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
 
     onEditModeFinished = (changed: boolean) => {
         this.setState({
-            editMode: false,
-            groups: this.state.groups
+            editMode: false
         });
     }
 
     render() {
         if (this.state.editMode) {
-            return <GroupEditor editGroup={this.state.editGroup} groups={this.state.groups} onFinished={this.onEditModeFinished} />;
+            return <GroupEditor editGroup={this.state.editGroup} onFinished={this.onEditModeFinished} />;
         }
         else {
             const titleStyle: React.CSSProperties = {
@@ -124,13 +115,13 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
                             </thead>
                             <tbody>
                                 {
-                                    this.state.groups.gets().map((val) => {
+                                    groupData.gets().map((val) => {
                                         return (
                                             <tr>
                                                 <td>{val.name}</td>
                                                 {
                                                     (() => {
-                                                        const item = val.getLentToolCount(this.state.tools.gets());
+                                                        const item = val.getLentToolCount(toolData.gets());
                                                         return (
                                                             item == 0
                                                                 ? <td style={{ textAlign: "center" }}>---</td>

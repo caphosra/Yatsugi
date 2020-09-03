@@ -2,11 +2,10 @@ import * as React from "react";
 import { Button, Card, InputGroup, FormControl } from "react-bootstrap";
 
 import { YatsugiTool } from "../../../lib/yatsugiTool";
-import { DataManager } from "../../dataManager";
+import { toolData } from "../../dataManager";
 
 export interface IToolEditorProps {
     editTool: YatsugiTool;
-    tools: DataManager<YatsugiTool>;
     onFinished: (changed: boolean) => void;
 }
 
@@ -28,7 +27,7 @@ export class ToolEditor extends React.Component<IToolEditorProps, IToolEditorSta
     saveButtonClicked = () => {
         let tool = this.props.editTool;
         tool.name = this.toolNameRef.current?.value ?? "no name";
-        this.props.tools.add(tool)
+        toolData.add(tool)
             .then(() => {
                 this.props.onFinished(true);
             })

@@ -5,9 +5,8 @@ import { remote } from "electron";
 
 import { openQrCodeDialog } from "../../../lib/qrcodeGenerator";
 import { ToolEditor } from "./toolEditor";
-import { YatsugiGroup } from "../../../lib/yatsugiGroup";
 import { YatsugiTool } from "../../../lib/yatsugiTool";
-import { DataManager } from "../../dataManager";
+import { groupData, toolData } from "../../dataManager";
 
 export interface IToolListProps {
 
@@ -16,9 +15,6 @@ export interface IToolListProps {
 export interface IToolListState {
     editMode: boolean;
     editTool: YatsugiTool;
-
-    groups: DataManager<YatsugiGroup>;
-    tools: DataManager<YatsugiTool>;
 }
 
 export class ToolList extends React.Component<IToolListProps, IToolListState> {
@@ -27,9 +23,7 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
 
         this.state = {
             editMode: false,
-            editTool: new YatsugiTool({ id: "", name: "", records: [] }),
-            tools: new DataManager<YatsugiTool>("tool"),
-            groups: new DataManager<YatsugiGroup>("group")
+            editTool: new YatsugiTool({ id: "", name: "", records: [] })
         };
     }
 
@@ -60,11 +54,9 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
             buttons: ["OK", "Cancel"]
         }).then((val) => {
             if (val.response == 0) {
-                this.state.tools.delete(id)
+                toolData.delete(id)
                     .then(() => {
-                        this.setState({
-                            tools: this.state.tools
-                        });
+                        this.forceUpdate();
                     })
                     .catch((err) => {
                         console.error(err);
@@ -75,14 +67,13 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
 
     onEditModeFinished = (changed: boolean) => {
         this.setState({
-            editMode: false,
-            tools: this.state.tools
+            editMode: false
         });
     }
 
     render() {
         if (this.state.editMode) {
-            return <ToolEditor editTool={this.state.editTool} tools={this.state.tools} onFinished={this.onEditModeFinished} />;
+            return <ToolEditor editTool={this.state.editTool} onFinished={this.onEditModeFinished} />;
         }
         else {
             const titleStyle: React.CSSProperties = {
@@ -124,18 +115,31 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
                             </thead>
                             <tbody>
                                 {
-                                    this.state.tools.gets().map((val) => {
+                                    toolData.gets().map((val) => {
                                         return (
                                             <tr>
                                                 <td>{val.name}</td>
                                                 {
                                                     (() => {
                                                         const id = val.getGroup();
-                                                        return (
-                                                            id == null
-                                                                ? <td style={{ textAlign: "center" }}>---</td>
-                                                                : <td style={{ textAlign: "center", color: "red" }}>{this.state.groups.findByID(id)?.name}</td>
-                                                        );
+                                                        if (id) {
+                                                            const name = groupData.findByID(id)?.name;
+                                                            if (name) {
+                                                                return (
+                                                                    <td style={{ textAlign: "center", color: "red" }}>{name}</td>
+                                                                );
+                                                            }
+                                                            else {
+                                                                return (
+                                                                    <td style={{ textAlign: "center", color: "red" }}>不明</td>
+                                                                );
+                                                            }
+                                                        }
+                                                        else {
+                                                            return (
+                                                                <td style={{ textAlign: "center" }}>---</td>
+                                                            );
+                                                        }
                                                     })()
                                                 }
                                                 <td style={{ width: 150 }}>

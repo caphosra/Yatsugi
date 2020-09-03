@@ -77,3 +77,6 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
         }
     }
 }
+
+export const groupData = new DataManager<YatsugiGroup>("group");
+export const toolData = new DataManager<YatsugiTool>("tool");
