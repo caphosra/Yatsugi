@@ -95,6 +95,10 @@ export class YatsugiTool {
     static saveAllAsync(tools: YatsugiTool[]) {
         return new Promise<void>((resolve, reject) => {
             try {
+                const files = glob.sync(path.join(app.getPath("appData"), "yatsugi", "tool-*.csv"));
+                for (const file of files) {
+                    fs.unlinkSync(file);
+                }
                 for (const tool of tools) {
                     const dataFilePath = this.getDataFilePath(tool);
                     const dataString = this.parseToString(tool);
