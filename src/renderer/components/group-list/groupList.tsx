@@ -1,8 +1,8 @@
 import * as React from "react";
 import { v4 as uuid } from "uuid";
 import { Table } from "react-bootstrap";
-import { remote } from "electron";
 
+import { showErrorDialog } from "../../showDialog";
 import { openQrCodeDialog } from "../../../lib/qrcodeGenerator";
 import { GroupEditor } from "./groupEditor";
 import { YatsugiGroup } from "../../../lib/yatsugiGroup";
@@ -46,13 +46,10 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
     };
 
     deleteGroupButtonClicked = (id: string) => {
-        const window = remote.getCurrentWindow();
-        remote.dialog.showMessageBox(window, {
-            type: "warning",
-            title: "Yatsugi",
-            message: "本当に削除しますか?\nもう戻って来ない事も理解していますよね? いたずらじゃないですよね? 開発者は責任を一切負いませんよ?",
-            buttons: ["OK", "Cancel"]
-        }).then((val) => {
+        showErrorDialog(
+            "本当に削除しますか?\nもう戻って来ない事も理解していますよね? いたずらじゃないですよね? 開発者は責任を一切負いませんよ?",
+            ["OK", "Cancel"]
+        ).then((val) => {
             if (val.response == 0) {
                 groupData.delete(id)
                     .then(() => {
