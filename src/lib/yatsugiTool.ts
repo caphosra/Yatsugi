@@ -55,7 +55,7 @@ export class YatsugiTool {
                     ? new Date(val.split(",")[1])
                     : undefined;
                 const groupID = val.split(",")[2];
-                return new ToolRecord(startTime, endTime, groupID);
+                return new ToolRecord({ startTime, endTime, groupID });
             });
         return new YatsugiTool({ id: id, name: name, records: records });
     }

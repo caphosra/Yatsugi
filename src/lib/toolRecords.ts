@@ -3,10 +3,10 @@ export class ToolRecord {
     endTime: Date | undefined = undefined;
     groupID: string = "";
 
-    constructor(startTime: Date, endTime: Date | undefined, groupID: string) {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.groupID = groupID;
+    constructor(item: { startTime: Date, endTime: Date | undefined, groupID: string }) {
+        this.startTime = item.startTime;
+        this.endTime = item.endTime;
+        this.groupID = item.groupID;
     }
 
     isLent() {
