@@ -25,6 +25,8 @@ git checkout csharp-HEAD
 |database-add-tool||YatsugiTool|boolean|
 |database-delete-group||string|boolean|
 |database-delete-tool||string|boolean|
+|database-lent-tool||string, string|boolean|
+|database-return-tool||string|boolean|
 |database-get-all-groups|:heavy_check_mark:||YatsugiGroup[]|
 |database-get-all-tools|:heavy_check_mark:||YatsugiTool[]|
 |qrcode-save||string, string|boolean|

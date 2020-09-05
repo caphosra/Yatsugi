@@ -1,5 +1,6 @@
 import { ipcMain } from "electron";
 
+import { ToolRecord } from "./lib/toolRecords";
 import { YatsugiGroup } from "./lib/yatsugiGroup";
 import { YatsugiTool } from "./lib/yatsugiTool";
 
@@ -182,6 +183,57 @@ export function initDatabase() {
                 console.error(err);
                 e.sender.send("database-delete-tool-reply", false);
             });
+    });
+
+    //
+    // Response on database-lent-tool
+    //
+    ipcMain.on("database-lent-tool", (e, groupID, toolID) => {
+        for (const tool of tools) {
+            if (tool.id == toolID) {
+                tool.records.push(
+                    new ToolRecord({
+                        startTime: new Date(),
+                        endTime: undefined,
+                        groupID: groupID
+                    })
+                );
+                YatsugiTool.saveAllAsync(tools)
+                    .then(() => {
+                        e.sender.send("database-lent-tool-reply", true);
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                        e.sender.send("database-lent-tool-reply", false);
+                    });
+                return;
+            }
+        }
+        e.sender.send("database-lent-tool-reply", false);
+    });
+
+    //
+    // Response on database-return-tool
+    //
+    ipcMain.on("database-return-tool", (e, groupID, toolID) => {
+        for (const tool of tools) {
+            if (tool.id == toolID) {
+                tool.records = tool.records.map((record) => {
+                    record.endTime = new Date();
+                    return record;
+                });
+                YatsugiTool.saveAllAsync(tools)
+                    .then(() => {
+                        e.sender.send("database-return-tool-reply", true);
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                        e.sender.send("database-return-tool-reply", false);
+                    });
+                return;
+            }
+        }
+        e.sender.send("database-return-tool-reply", false);
     });
 
     //
