@@ -1,41 +1,41 @@
 import * as React from "react";
 import { Button, Card, InputGroup, FormControl } from "react-bootstrap";
 
-import { YatsugiGroup } from "../../../lib/yatsugiGroup";
-import { groupData } from "../../dataManager";
+import { YatsugiTool } from "../../../lib/yatsugiTool";
+import { toolData } from "../../dataManager";
 
-export interface IGroupEditorProps {
-    editGroup: YatsugiGroup;
+export interface IToolEditorProps {
+    editTool: YatsugiTool;
     onFinished: (changed: boolean) => void;
 }
 
-export interface IGroupEditorState {
+export interface IToolEditorState {
 
 }
 
-export class GroupEditor extends React.Component<IGroupEditorProps, IGroupEditorState> {
-    constructor(props: IGroupEditorProps) {
+export class ToolEditor extends React.Component<IToolEditorProps, IToolEditorState> {
+    constructor(props: IToolEditorProps) {
         super(props);
 
         this.state = { };
 
-        this.groupNameRef = React.createRef();
+        this.toolNameRef = React.createRef();
     }
 
-    groupNameRef: React.RefObject<HTMLInputElement>;
+    toolNameRef: React.RefObject<HTMLInputElement>;
 
     saveButtonClicked = async () => {
         this.saveButtonClicked = async () => { };
 
-        let group = this.props.editGroup;
-        group.name = this.groupNameRef.current?.value ?? "no name";
+        let tool = this.props.editTool;
+        tool.name = this.toolNameRef.current?.value ?? "no name";
         try {
-            await groupData.add(group);
+            await toolData.add(tool);
             this.props.onFinished(true);
         }
-        catch(err) {
+        catch (err) {
             console.error(err);
-        };
+        }
     };
 
     cancelButtonClicked = () => {
@@ -60,7 +60,7 @@ export class GroupEditor extends React.Component<IGroupEditorProps, IGroupEditor
         return (
             <div>
                 <h1 style={titleStyle}>
-                    団体一覧
+                    器材一覧
                 </h1>
                 <Card style={bodyStyle} body>
                     <InputGroup className="mb-3" contentEditable={false}>
@@ -68,7 +68,7 @@ export class GroupEditor extends React.Component<IGroupEditorProps, IGroupEditor
                             <InputGroup.Text>ID :</InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl
-                            value={this.props.editGroup.id}
+                            value={this.props.editTool.id}
                         />
                     </InputGroup>
                     <InputGroup className="mb-3">
@@ -76,9 +76,9 @@ export class GroupEditor extends React.Component<IGroupEditorProps, IGroupEditor
                             <InputGroup.Text>Name :</InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl
-                            placeholder="団体名"
-                            ref={this.groupNameRef}
-                            defaultValue={this.props.editGroup.name}
+                            placeholder="器材名"
+                            ref={this.toolNameRef}
+                            defaultValue={this.props.editTool.name}
                         />
                     </InputGroup>
                     <Button onClick={this.saveButtonClicked}>

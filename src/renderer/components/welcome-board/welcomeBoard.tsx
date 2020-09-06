@@ -55,7 +55,7 @@ export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBo
                     </Col>
                     <Col>
                         <SelectModePanel title="返却する" image_path="../assets/back.png">
-                            <Button style={buttonStyle} variant="danger">
+                            <Button onClick={() => this.props.onContentsMove(Contents.RETURN_TOOL)} style={buttonStyle} variant="danger">
                                 開始
                             </Button>
                         </SelectModePanel>
@@ -65,7 +65,7 @@ export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBo
                             <Button onClick={() => this.props.onContentsMove(Contents.GROUP_LIST)} style={buttonStyle} variant="primary">
                                 団体リスト
                             </Button>
-                            <Button style={buttonStyle} variant="primary">
+                            <Button onClick={() => this.props.onContentsMove(Contents.TOOL_LIST)} style={buttonStyle} variant="primary">
                                 器材リスト
                             </Button>
                         </SelectModePanel>

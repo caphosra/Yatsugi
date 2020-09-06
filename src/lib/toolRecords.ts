@@ -1,12 +1,12 @@
 export class ToolRecord {
-    startTime: Date = new Date();
-    endTime: Date | undefined = undefined;
+    startTime: number = 0;
+    endTime: number | undefined = undefined;
     groupID: string = "";
 
-    constructor(startTime: Date, endTime: Date | undefined, groupID: string) {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.groupID = groupID;
+    constructor(item: { startTime: number, endTime: number | undefined, groupID: string }) {
+        this.startTime = item.startTime;
+        this.endTime = item.endTime;
+        this.groupID = item.groupID;
     }
 
     isLent() {

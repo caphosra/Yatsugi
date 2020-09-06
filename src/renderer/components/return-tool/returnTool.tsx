@@ -5,23 +5,20 @@ import { showInfoDialog, showErrorDialog } from "../../showDialog"
 import { Contents } from "../../root";
 import keyEventManager from "../../keyEventManager";
 import { YatsugiTool } from "../../../lib/yatsugiTool";
-import { YatsugiGroup } from "../../../lib/yatsugiGroup";
-import { groupData, toolData } from "../../dataManager";
+import { toolData } from "../../dataManager";
 
-export interface ILentToolProps {
+export interface IReturnToolProps {
     onContentsMove: (content: Contents) => void;
 }
 
-export interface ILentToolState {
-    group: YatsugiGroup | undefined;
+export interface IReturnToolState {
     tools: YatsugiTool[];
 }
 
-export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
-    constructor(props: ILentToolProps) {
+export class ReturnTool extends React.Component<IReturnToolProps, IReturnToolState> {
+    constructor(props: IReturnToolProps) {
         super(props);
         this.state = {
-            group: undefined,
             tools: []
         };
 
@@ -34,14 +31,6 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
         if (e.key == "Enter") {
             const id = this.currentText;
             this.currentText = "";
-
-            const groupLoaded = groupData.findByID(id);
-            if (groupLoaded) {
-                this.setState({
-                    group: groupLoaded
-                });
-                return;
-            }
 
             const toolLoaded = toolData.findByID(id);
             if (toolLoaded) {
@@ -60,7 +49,6 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
         }
         else if (e.key == "F5") {
             this.setState({
-                group: groupData.gets()[0],
                 tools: toolData.gets()
             });
         }
@@ -79,19 +67,14 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
         });
     }
 
-    async lentButtonClicked() {
-        if (this.state.group) {
-            try {
-                await toolData.lentItem(this.state.group.id, this.state.tools.map(tool => tool.id));
-                await showInfoDialog("貸出完了しました。");
-                this.props.onContentsMove(Contents.WELCOME_BOARD);
-            }
-            catch (err) {
-                await showErrorDialog(err);
-            }
+    async returnButtonClicked() {
+        try {
+            await toolData.returnItem(this.state.tools.map(tool => tool.id));
+            await showInfoDialog("返却完了しました。");
+            this.props.onContentsMove(Contents.WELCOME_BOARD);
         }
-        else {
-            await showErrorDialog("どの団体に貸し出すかハッキリさせましょう!");
+        catch (err) {
+            await showErrorDialog(err);
         }
     }
 
@@ -122,18 +105,10 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
         return (
             <div>
                 <h1 style={titleStyle}>
-                    器材の貸出
+                    器材の返却
                 </h1>
                 <Card style={cardStyle}>
-                    <Card.Title>貸出団体</Card.Title>
-                    <Card.Body>
-                        <p style={{ textAlign: "center", fontSize: 15 }}>
-                            {this.state.group?.name ?? "Waiting..."}
-                        </p>
-                    </Card.Body>
-                </Card>
-                <Card style={cardStyle}>
-                    <Card.Title>貸出器材</Card.Title>
+                    <Card.Title>返却器材</Card.Title>
                     <Card.Body>
                         <Table striped bordered hover><tbody>
                         {
@@ -151,8 +126,8 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
                         </tbody></Table>
                     </Card.Body>
                 </Card>
-                <Button onClick={() => this.lentButtonClicked()} style={buttonStyle} variant="primary">
-                    貸し出す
+                <Button onClick={() => this.returnButtonClicked()} style={buttonStyle} variant="primary">
+                    返却する
                 </Button>
             </div>
         );

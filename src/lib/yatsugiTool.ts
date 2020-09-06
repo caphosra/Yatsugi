@@ -13,7 +13,7 @@ export class YatsugiTool {
     constructor(item: { id: string, name: string, records: ToolRecord[] }) {
         this.id = item.id;
         this.name = item.name;
-        this.records = item.records;
+        this.records = item.records.map(record => new ToolRecord(record));
     }
 
     getGroup() {
@@ -50,12 +50,12 @@ export class YatsugiTool {
 
         const records = contents.slice(1)
             .map((val) => {
-                const startTime = new Date(val.split(",")[0]);
+                const startTime = parseInt(val.split(",")[0]);
                 const endTime = val.split(",")[1] != "null"
-                    ? new Date(val.split(",")[1])
+                    ? parseInt(val.split(",")[1])
                     : undefined;
                 const groupID = val.split(",")[2];
-                return new ToolRecord(startTime, endTime, groupID);
+                return new ToolRecord({ startTime, endTime, groupID });
             });
         return new YatsugiTool({ id: id, name: name, records: records });
     }
@@ -70,7 +70,7 @@ export class YatsugiTool {
 
     static loadAllAsync() {
         return new Promise<YatsugiTool[]>((resolve, reject) => {
-            glob(path.join(app.getPath("appData"), "tool-*.csv"), (err, files) => {
+            glob(path.join(app.getPath("appData"), "yatsugi", "tool-*.csv"), (err, files) => {
                 if (err) {
                     reject(err);
                 }
@@ -95,6 +95,10 @@ export class YatsugiTool {
     static saveAllAsync(tools: YatsugiTool[]) {
         return new Promise<void>((resolve, reject) => {
             try {
+                const files = glob.sync(path.join(app.getPath("appData"), "yatsugi", "tool-*.csv"));
+                for (const file of files) {
+                    fs.unlinkSync(file);
+                }
                 for (const tool of tools) {
                     const dataFilePath = this.getDataFilePath(tool);
                     const dataString = this.parseToString(tool);

@@ -4,40 +4,40 @@ import { Table } from "react-bootstrap";
 
 import { showErrorDialog } from "../../showDialog";
 import { openQrCodeDialog } from "../../../lib/qrcodeGenerator";
-import { GroupEditor } from "./groupEditor";
-import { YatsugiGroup } from "../../../lib/yatsugiGroup";
-import { toolData, groupData } from "../../dataManager";
+import { ToolEditor } from "./toolEditor";
+import { YatsugiTool } from "../../../lib/yatsugiTool";
+import { groupData, toolData } from "../../dataManager";
 
-export interface IGroupListProps {
+export interface IToolListProps {
 
 }
 
-export interface IGroupListState {
+export interface IToolListState {
     editMode: boolean;
-    editGroup: YatsugiGroup;
+    editTool: YatsugiTool;
 }
 
-export class GroupList extends React.Component<IGroupListProps, IGroupListState> {
-    constructor(props: IGroupListProps) {
+export class ToolList extends React.Component<IToolListProps, IToolListState> {
+    constructor(props: IToolListProps) {
         super(props);
 
         this.state = {
             editMode: false,
-            editGroup: new YatsugiGroup({ id: "", name: "" })
+            editTool: new YatsugiTool({ id: "", name: "", records: [] })
         };
     }
 
-    addGroupButtonClicked = () => {
+    addToolButtonClicked = () => {
         this.setState({
             editMode: true,
-            editGroup: new YatsugiGroup({ id: uuid(), name: "Untitled" })
+            editTool: new YatsugiTool({ id: uuid(), name: "Untitled", records: [] })
         });
     }
 
-    editGroupButtonClicked = (group: YatsugiGroup) => {
+    editToolButtonClicked = (tool: YatsugiTool) => {
         this.setState({
             editMode: true,
-            editGroup: group
+            editTool: tool
         });
     }
 
@@ -45,13 +45,13 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
         await openQrCodeDialog(id);
     };
 
-    deleteGroupButtonClicked = (id: string) => {
+    deleteToolButtonClicked = (id: string) => {
         showErrorDialog(
             "本当に削除しますか?\nもう戻って来ない事も理解していますよね? いたずらじゃないですよね? 開発者は責任を一切負いませんよ?",
             ["OK", "Cancel"]
         ).then((val) => {
             if (val.response == 0) {
-                groupData.delete(id)
+                toolData.delete(id)
                     .then(() => {
                         this.forceUpdate();
                     })
@@ -70,7 +70,7 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
 
     render() {
         if (this.state.editMode) {
-            return <GroupEditor editGroup={this.state.editGroup} onFinished={this.onEditModeFinished} />;
+            return <ToolEditor editTool={this.state.editTool} onFinished={this.onEditModeFinished} />;
         }
         else {
             const titleStyle: React.CSSProperties = {
@@ -96,42 +96,55 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
             return (
                 <div>
                     <h1 style={titleStyle}>
-                        団体一覧
+                        器材一覧
                     </h1>
-                    <div onClick={this.addGroupButtonClicked} style={iconStyle}>
+                    <div onClick={this.addToolButtonClicked} style={iconStyle}>
                         <i className="fas fa-plus fa-2x"></i>
                     </div>
                     <div style={tableStyle}>
                         <Table striped bordered hover>
                             <thead>
                                 <tr>
-                                    <th>団体名</th>
-                                    <th>貸出中</th>
+                                    <th>器材名</th>
+                                    <th>貸出先</th>
                                     <th>管理</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    groupData.gets().map((val) => {
+                                    toolData.gets().map((val) => {
                                         return (
                                             <tr>
                                                 <td>{val.name}</td>
                                                 {
                                                     (() => {
-                                                        const item = val.getLentToolCount(toolData.gets());
-                                                        return (
-                                                            item == 0
-                                                                ? <td style={{ textAlign: "center" }}>---</td>
-                                                                : <td style={{ textAlign: "center", color: "red" }}>{item}</td>
-                                                        );
+                                                        const id = val.getGroup();
+                                                        if (id) {
+                                                            const name = groupData.findByID(id)?.name;
+                                                            if (name) {
+                                                                return (
+                                                                    <td style={{ textAlign: "center", color: "red" }}>{name}</td>
+                                                                );
+                                                            }
+                                                            else {
+                                                                return (
+                                                                    <td style={{ textAlign: "center", color: "red" }}>不明</td>
+                                                                );
+                                                            }
+                                                        }
+                                                        else {
+                                                            return (
+                                                                <td style={{ textAlign: "center" }}>---</td>
+                                                            );
+                                                        }
                                                     })()
                                                 }
                                                 <td style={{ width: 150 }}>
-                                                    <i className="fas fa-edit" onClick={() => this.editGroupButtonClicked(val)}></i>
+                                                    <i className="fas fa-edit" onClick={() => this.editToolButtonClicked(val)}></i>
                                                     &nbsp;&nbsp;
                                                     <i className="fas fa-qrcode" onClick={() => this.qrCodeButtonClicked(val.id)}></i>
                                                     &nbsp;&nbsp;
-                                                    <i className="fas fa-trash" onClick={() => this.deleteGroupButtonClicked(val.id)}></i>
+                                                    <i className="fas fa-trash" onClick={() => this.deleteToolButtonClicked(val.id)}></i>
                                                 </td>
                                             </tr>
                                         );
