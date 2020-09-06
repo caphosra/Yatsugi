@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { LentTool } from "./components/lent-tool/lentTool";
+import { ReturnTool } from "./components/return-tool/returnTool";
 import { WelcomeBoard } from "./components/welcome-board/welcomeBoard";
 import { GroupList } from "./components/group-list/groupList";
 import { ToolList } from "./components/tool-list/toolList";
@@ -8,6 +9,7 @@ import { ToolList } from "./components/tool-list/toolList";
 export enum Contents {
     WELCOME_BOARD,
     LENT_TOOL,
+    RETURN_TOOL,
     GROUP_LIST,
     TOOL_LIST
 }
@@ -43,6 +45,9 @@ export class RootContent extends React.Component<IRootContentProps, IRootContent
                 break;
             case Contents.LENT_TOOL:
                 content = <LentTool onContentsMove={this.onContentsMove} />;
+                break;
+            case Contents.RETURN_TOOL:
+                content = <ReturnTool onContentsMove={this.onContentsMove} />;
                 break;
             case Contents.GROUP_LIST:
                 content = <GroupList />;
