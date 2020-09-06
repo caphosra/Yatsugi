@@ -215,7 +215,7 @@ export function initDatabase() {
     //
     // Response on database-return-tool
     //
-    ipcMain.on("database-return-tool", (e, groupID, toolID) => {
+    ipcMain.on("database-return-tool", (e, toolID) => {
         for (const tool of tools) {
             if (tool.id == toolID) {
                 tool.records = tool.records.map((record) => {
