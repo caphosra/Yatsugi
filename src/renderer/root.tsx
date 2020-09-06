@@ -42,7 +42,7 @@ export class RootContent extends React.Component<IRootContentProps, IRootContent
                 content = <WelcomeBoard onContentsMove={this.onContentsMove} />;
                 break;
             case Contents.LENT_TOOL:
-                content = <LentTool />;
+                content = <LentTool onContentsMove={this.onContentsMove} />;
                 break;
             case Contents.GROUP_LIST:
                 content = <GroupList />;

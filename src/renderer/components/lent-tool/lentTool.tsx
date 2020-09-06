@@ -1,22 +1,28 @@
 import * as React from 'react';
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Card, Table } from "react-bootstrap";
 
+import { showInfoDialog, showErrorDialog } from "../../showDialog"
+import { Contents } from "../../root";
 import keyEventManager from "../../keyEventManager";
-import { SelectModePanel } from '../welcome-board/selectModePanel';
+import { YatsugiTool } from "../../../lib/yatsugiTool";
+import { YatsugiGroup } from "../../../lib/yatsugiGroup";
+import { groupData, toolData } from "../../dataManager";
 
 export interface ILentToolProps {
-
+    onContentsMove: (content: Contents) => void;
 }
 
 export interface ILentToolState {
-    group: string;
+    group: YatsugiGroup | undefined;
+    tools: YatsugiTool[];
 }
 
 export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
     constructor(props: ILentToolProps) {
         super(props);
         this.state = {
-            group: ""
+            group: undefined,
+            tools: []
         };
 
         keyEventManager.eventList.push(this.onKeyDown);
@@ -26,14 +32,66 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
 
     onKeyDown = (e: KeyboardEvent) => {
         if (e.key == "Enter") {
-            console.log("text: " + this.currentText);
-            this.setState({
-                group: this.currentText
-            });
+            const id = this.currentText;
             this.currentText = "";
+
+            const groupLoaded = groupData.findByID(id);
+            if (groupLoaded) {
+                this.setState({
+                    group: groupLoaded
+                });
+                return;
+            }
+
+            const toolLoaded = toolData.findByID(id);
+            if (toolLoaded) {
+                const tools = this.state.tools.filter((tool) => {
+                    return tool.id != toolLoaded.id;
+                });
+                tools.push(toolLoaded);
+
+                this.setState({
+                    tools: tools
+                });
+                return;
+            }
+
+            showErrorDialog("読み込みに失敗しました。\nもう一度試してみてください。");
+        }
+        else if (e.key == "F5") {
+            this.setState({
+                group: groupData.gets()[0],
+                tools: toolData.gets()
+            });
         }
         else {
             this.currentText += e.key;
+        }
+    }
+
+    deleteButtonClicked(id: string) {
+        const tools = this.state.tools.filter((tool) => {
+            return tool.id != id;
+        });
+
+        this.setState({
+            tools: tools
+        });
+    }
+
+    async lentButtonClicked() {
+        if (this.state.group) {
+            try {
+                await toolData.lentItem(this.state.group.id, this.state.tools.map(tool => tool.id));
+                await showInfoDialog("貸出完了しました。");
+                this.props.onContentsMove(Contents.WELCOME_BOARD);
+            }
+            catch (err) {
+                await showErrorDialog(err);
+            }
+        }
+        else {
+            await showErrorDialog("どの団体に貸し出すかハッキリさせましょう!");
         }
     }
 
@@ -46,6 +104,11 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
             fontSize: 30,
 
             color: "black"
+        };
+
+        const cardStyle: React.CSSProperties = {
+            margin: 20,
+            padding: 20
         };
 
         const buttonStyle: React.CSSProperties = {
@@ -61,30 +124,34 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
                 <h1 style={titleStyle}>
                     器材の貸出
                 </h1>
-                <Container><Row>
-                    <Col>
-                        <SelectModePanel title="貸し出す" image_path="../assets/goout.png">
-                            <Button style={buttonStyle} variant="success">
-                                開始
-                            </Button>
-                        </SelectModePanel>
-                    </Col>
-                    <Col>
-                        <SelectModePanel title="返却する" image_path="../assets/back.png">
-                            <Button style={buttonStyle} variant="danger">
-                                開始
-                            </Button>
-                        </SelectModePanel>
-                    </Col>
-                    <Col>
-                        <SelectModePanel title="管理" image_path="../assets/manage.png">
-                            <Button style={buttonStyle} variant="primary">
-                                団体リスト
-                            </Button>
-                        </SelectModePanel>
-                    </Col>
-                </Row></Container>
-                <Button style={buttonStyle} variant="primary">
+                <Card style={cardStyle}>
+                    <Card.Title>貸出団体</Card.Title>
+                    <Card.Body>
+                        <p style={{ textAlign: "center", fontSize: 15 }}>
+                            {this.state.group?.name ?? "Waiting..."}
+                        </p>
+                    </Card.Body>
+                </Card>
+                <Card style={cardStyle}>
+                    <Card.Title>貸出器材</Card.Title>
+                    <Card.Body>
+                        <Table striped bordered hover><tbody>
+                        {
+                            this.state.tools.map((tool) => {
+                                return (
+                                    <tr>
+                                        <td>{tool.name}</td>
+                                        <td>
+                                            <i className="fas fa-trash" onClick={() => this.deleteButtonClicked(tool.id)}></i>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
+                        </tbody></Table>
+                    </Card.Body>
+                </Card>
+                <Button onClick={() => this.lentButtonClicked()} style={buttonStyle} variant="primary">
                     貸し出す
                 </Button>
             </div>
