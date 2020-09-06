@@ -4,7 +4,7 @@
 
 文化祭における器材貸し出しをスムーズに進める為のツールです.
 
-![Example](https://media.githubusercontent.com/media/capra314cabra/Yatsugi/master/img/example.gif)
+![Example](https://raw.githubusercontent.com/capra314cabra/Yatsugi/master/img/example.gif)
 
 ## 注意
 
