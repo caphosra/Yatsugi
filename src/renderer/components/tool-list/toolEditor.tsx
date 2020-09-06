@@ -24,17 +24,18 @@ export class ToolEditor extends React.Component<IToolEditorProps, IToolEditorSta
 
     toolNameRef: React.RefObject<HTMLInputElement>;
 
-    saveButtonClicked = () => {
+    saveButtonClicked = async () => {
+        this.saveButtonClicked = async () => { };
+
         let tool = this.props.editTool;
         tool.name = this.toolNameRef.current?.value ?? "no name";
-        toolData.add(tool)
-            .then(() => {
-                this.props.onFinished(true);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-        this.saveButtonClicked = () => { };
+        try {
+            await toolData.add(tool);
+            this.props.onFinished(true);
+        }
+        catch (err) {
+            console.error(err);
+        }
     };
 
     cancelButtonClicked = () => {

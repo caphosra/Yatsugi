@@ -24,17 +24,18 @@ export class GroupEditor extends React.Component<IGroupEditorProps, IGroupEditor
 
     groupNameRef: React.RefObject<HTMLInputElement>;
 
-    saveButtonClicked = () => {
+    saveButtonClicked = async () => {
+        this.saveButtonClicked = async () => { };
+
         let group = this.props.editGroup;
         group.name = this.groupNameRef.current?.value ?? "no name";
-        groupData.add(group)
-            .then(() => {
-                this.props.onFinished(true);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-        this.saveButtonClicked = () => { };
+        try {
+            await groupData.add(group);
+            this.props.onFinished(true);
+        }
+        catch(err) {
+            console.error(err);
+        };
     };
 
     cancelButtonClicked = () => {
