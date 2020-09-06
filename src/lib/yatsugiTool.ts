@@ -13,7 +13,7 @@ export class YatsugiTool {
     constructor(item: { id: string, name: string, records: ToolRecord[] }) {
         this.id = item.id;
         this.name = item.name;
-        this.records = item.records;
+        this.records = item.records.map(record => new ToolRecord(record));
     }
 
     getGroup() {
@@ -50,9 +50,9 @@ export class YatsugiTool {
 
         const records = contents.slice(1)
             .map((val) => {
-                const startTime = new Date(val.split(",")[0]);
+                const startTime = parseInt(val.split(",")[0]);
                 const endTime = val.split(",")[1] != "null"
-                    ? new Date(val.split(",")[1])
+                    ? parseInt(val.split(",")[1])
                     : undefined;
                 const groupID = val.split(",")[2];
                 return new ToolRecord({ startTime, endTime, groupID });

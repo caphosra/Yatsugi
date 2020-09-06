@@ -193,7 +193,7 @@ export function initDatabase() {
             if (tool.id == toolID) {
                 tool.records.push(
                     new ToolRecord({
-                        startTime: new Date(),
+                        startTime: Date.now(),
                         endTime: undefined,
                         groupID: groupID
                     })
@@ -219,7 +219,7 @@ export function initDatabase() {
         for (const tool of tools) {
             if (tool.id == toolID) {
                 tool.records = tool.records.map((record) => {
-                    record.endTime = new Date();
+                    record.endTime = Date.now();
                     return record;
                 });
                 YatsugiTool.saveAllAsync(tools)
