@@ -4,6 +4,8 @@
 
 文化祭における器材貸し出しをスムーズに進める為のツールです.
 
+![Example](https://media.githubusercontent.com/media/capra314cabra/Yatsugi/master/img/example.gif)
+
 ## 注意
 
 UIデザインに使うライブラリを C# Avalonia から Electron に移行しました.  

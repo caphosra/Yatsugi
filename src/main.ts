@@ -9,7 +9,6 @@ function createWindow() {
     const mainWindow = new BrowserWindow({
         height: 600,
         width: 800,
-        opacity: 0.95,
         webPreferences: {
             nodeIntegration: true
         }
