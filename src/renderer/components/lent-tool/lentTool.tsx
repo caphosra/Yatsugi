@@ -1,15 +1,15 @@
-import * as React from 'react';
+import * as React from "react";
 import { Button, Card, Table } from "react-bootstrap";
+import { useHistory, RouteComponentProps, withRouter } from "react-router-dom";
 
-import { showInfoDialog, showErrorDialog } from "../../showDialog"
-import { Contents } from "../../root";
+import { showInfoDialog, showErrorDialog } from "../../showDialog";
 import keyEventManager from "../../keyEventManager";
 import { YatsugiTool } from "../../../lib/yatsugiTool";
 import { YatsugiGroup } from "../../../lib/yatsugiGroup";
 import { groupData, toolData } from "../../dataManager";
 
-export interface ILentToolProps {
-    onContentsMove: (content: Contents) => void;
+export interface ILentToolProps extends RouteComponentProps {
+
 }
 
 export interface ILentToolState {
@@ -84,7 +84,7 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
             try {
                 await toolData.lentItem(this.state.group.id, this.state.tools.map(tool => tool.id));
                 await showInfoDialog("貸出完了しました。");
-                this.props.onContentsMove(Contents.WELCOME_BOARD);
+                useHistory().push("/");
             }
             catch (err) {
                 await showErrorDialog(err);
@@ -158,3 +158,5 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
         );
     }
 }
+
+export const LentToolWithRouter = withRouter(LentTool);

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { v4 as uuid } from "uuid";
 import { Table } from "react-bootstrap";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { showErrorDialog } from "../../showDialog";
 import { openQrCodeDialog } from "../../../lib/qrcodeGenerator";
@@ -8,7 +9,7 @@ import { GroupEditor } from "./groupEditor";
 import { YatsugiGroup } from "../../../lib/yatsugiGroup";
 import { toolData, groupData } from "../../dataManager";
 
-export interface IGroupListProps {
+export interface IGroupListProps extends RouteComponentProps {
 
 }
 
@@ -145,3 +146,5 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
         }
     }
 }
+
+export const GroupListWithRouter = withRouter(GroupList);

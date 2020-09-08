@@ -1,6 +1,7 @@
 import * as React from "react";
 import { v4 as uuid } from "uuid";
 import { Table } from "react-bootstrap";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { showErrorDialog } from "../../showDialog";
 import { openQrCodeDialog } from "../../../lib/qrcodeGenerator";
@@ -8,7 +9,7 @@ import { ToolEditor } from "./toolEditor";
 import { YatsugiTool } from "../../../lib/yatsugiTool";
 import { groupData, toolData } from "../../dataManager";
 
-export interface IToolListProps {
+export interface IToolListProps extends RouteComponentProps {
 
 }
 
@@ -158,3 +159,5 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
         }
     }
 }
+
+export const ToolListWithRouter = withRouter(ToolList);

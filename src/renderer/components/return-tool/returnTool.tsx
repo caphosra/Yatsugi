@@ -1,14 +1,14 @@
-import * as React from 'react';
+import * as React from "react";
 import { Button, Card, Table } from "react-bootstrap";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { showInfoDialog, showErrorDialog } from "../../showDialog"
-import { Contents } from "../../root";
 import keyEventManager from "../../keyEventManager";
 import { YatsugiTool } from "../../../lib/yatsugiTool";
 import { toolData } from "../../dataManager";
 
-export interface IReturnToolProps {
-    onContentsMove: (content: Contents) => void;
+export interface IReturnToolProps extends RouteComponentProps {
+
 }
 
 export interface IReturnToolState {
@@ -71,7 +71,7 @@ export class ReturnTool extends React.Component<IReturnToolProps, IReturnToolSta
         try {
             await toolData.returnItem(this.state.tools.map(tool => tool.id));
             await showInfoDialog("返却完了しました。");
-            this.props.onContentsMove(Contents.WELCOME_BOARD);
+            this.props.history.push("/");
         }
         catch (err) {
             await showErrorDialog(err);
@@ -133,3 +133,5 @@ export class ReturnTool extends React.Component<IReturnToolProps, IReturnToolSta
         );
     }
 }
+
+export const ReturnToolWithRouter = withRouter(ReturnTool);

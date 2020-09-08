@@ -1,12 +1,13 @@
-import * as React from 'react';
+import * as React from "react";
+import * as path from "path";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { RouteComponentProps, Link, withRouter } from "react-router-dom";
 
-import { Contents } from "../../root"
 import keyEventManager from "../../keyEventManager";
 import { SelectModePanel } from './selectModePanel';
 
-export interface IWelcomeBoardProps {
-    onContentsMove: (content: Contents) => void;
+export interface IWelcomeBoardProps extends RouteComponentProps {
+
 }
 
 export interface IWelcomeBoardState {
@@ -47,27 +48,35 @@ export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBo
                 </h1>
                 <Container><Row>
                     <Col>
-                        <SelectModePanel title="貸し出す" image_path="../assets/goout.png">
-                            <Button onClick={() => this.props.onContentsMove(Contents.LENT_TOOL)} style={buttonStyle} variant="success">
-                                開始
-                            </Button>
+                        <SelectModePanel title="貸し出す" image_path={`file://${path.join(__dirname, "../assets/goout.png")}`}>
+                            <Link to="/lent">
+                                <Button style={buttonStyle} variant="success">
+                                    開始
+                                </Button>
+                            </Link>
                         </SelectModePanel>
                     </Col>
                     <Col>
-                        <SelectModePanel title="返却する" image_path="../assets/back.png">
-                            <Button onClick={() => this.props.onContentsMove(Contents.RETURN_TOOL)} style={buttonStyle} variant="danger">
-                                開始
-                            </Button>
+                        <SelectModePanel title="返却する" image_path={`file://${path.join(__dirname, "../assets/back.png")}`}>
+                            <Link to="/return">
+                                <Button style={buttonStyle} variant="danger">
+                                    開始
+                                </Button>
+                            </Link>
                         </SelectModePanel>
                     </Col>
                     <Col>
-                        <SelectModePanel title="管理" image_path="../assets/manage.png">
-                            <Button onClick={() => this.props.onContentsMove(Contents.GROUP_LIST)} style={buttonStyle} variant="primary">
-                                団体リスト
-                            </Button>
-                            <Button onClick={() => this.props.onContentsMove(Contents.TOOL_LIST)} style={buttonStyle} variant="primary">
-                                器材リスト
-                            </Button>
+                        <SelectModePanel title="管理" image_path={`file://${path.join(__dirname, "../assets/manage.png")}`}>
+                            <Link to="/group/list">
+                                <Button style={buttonStyle} variant="primary">
+                                    団体リスト
+                                </Button>
+                            </Link>
+                            <Link to="/tool/list">
+                                <Button style={buttonStyle} variant="primary">
+                                    器材リスト
+                                </Button>
+                            </Link>
                         </SelectModePanel>
                     </Col>
                 </Row></Container>
@@ -75,3 +84,5 @@ export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBo
         );
     }
 }
+
+export const WelcomeBoardWithRouter = withRouter(WelcomeBoard);
