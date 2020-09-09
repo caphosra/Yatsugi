@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, Menu } from "electron";
 import * as path from "path";
+import * as process from "process";
 
 import { initDatabase } from "./dataServer";
 import { initQRcodeServer } from "./qrcodeServer";
@@ -21,6 +22,13 @@ function createWindow() {
 
     ipcMain.on("opendev", e => {
         mainWindow.webContents.openDevTools();
+    });
+
+    ipcMain.on("assetfolder", e => {
+        const assetDir = app.isPackaged
+            ? path.join(process.resourcesPath, "assets")
+            : path.join(__dirname, "../assets");
+        e.returnValue = assetDir;
     });
 }
 

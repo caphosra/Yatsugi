@@ -7,7 +7,7 @@
         "clean": "rmdir dist /s /q && rmdir bin /s /q",
         "build": "npx webpack",
         "start": "npm run build && electron ./dist/main.js",
-        "pack": "npm run build && electron-builder"
+        "pack": "npm run build && ts-node pack-all.ts"
     },
     "repository": "",
     "keywords": [],
@@ -41,26 +41,5 @@
         "react-router": "^5.2.0",
         "react-router-dom": "^5.2.0",
         "uuid": "^8.3.0"
-    },
-    "build": {
-        "appId": "com.capra314cabra.yatsugi",
-        "directories": {
-            "output": "bin"
-        },
-        "files": [
-            "./dist/**/*.js",
-            "./html/**/*.html",
-            "./assets/**/*"
-        ],
-        "mac": {
-            "target": "dmg"
-        },
-        "win": {
-            "target": "nsis"
-        },
-        "nsis": {
-            "oneClick": false,
-            "allowToChangeInstallationDirectory": true
-        }
     }
 }

@@ -34,6 +34,7 @@ git checkout csharp-HEAD
 |database-get-all-groups|:heavy_check_mark:||YatsugiGroup[]|
 |database-get-all-tools|:heavy_check_mark:||YatsugiTool[]|
 |qrcode-save||string, string|boolean|
+|assetfolder|||string|
 |opendev||||
 
 `database-check-*`はIDで検索するのに対して、`database-find-*`は文字列で検索をします。

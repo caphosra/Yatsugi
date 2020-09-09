@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import { RootContent } from "./root";
 
+console.log(`Assets folder: ${ipcRenderer.sendSync("assetfolder")}`);
 
 document.addEventListener("keydown", (e) => {
     if (e.key == "F11") {
