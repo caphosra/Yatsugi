@@ -20,9 +20,9 @@ function createWindow() {
 
     Menu.setApplicationMenu(null);
 
-    ipcMain.on("opendev", e => {
+    if (process.env.NODE_ENV == "development") {
         mainWindow.webContents.openDevTools();
-    });
+    }
 
     ipcMain.on("assetfolder", e => {
         const assetDir = app.isPackaged
