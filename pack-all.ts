@@ -24,6 +24,7 @@ build({
                 ]
             }
         ],
+        icon: "./assets/goout.png",
         mac: {
             target: "dmg"
         },
