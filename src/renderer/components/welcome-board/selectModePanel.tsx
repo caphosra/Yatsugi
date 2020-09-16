@@ -1,9 +1,10 @@
-import * as React from 'react';
+import * as React from "react";
 import { Card, Image } from "react-bootstrap";
+import { ipcRenderer } from "electron";
 
 export interface ISelectModePanelProps {
     title: string;
-    image_path: string;
+    imagePath: string;
 }
 
 export interface ISelectModePanelState {
@@ -14,7 +15,11 @@ export class SelectModePanel extends React.Component<ISelectModePanelProps, ISel
     constructor(props: ISelectModePanelProps) {
         super(props);
         this.state = { };
+
+        this.imageContent = ipcRenderer.sendSync("load-image", this.props.imagePath);
     }
+
+    imageContent = "";
 
     render() {
         const cardStyle: React.CSSProperties = {
@@ -32,7 +37,7 @@ export class SelectModePanel extends React.Component<ISelectModePanelProps, ISel
             <Card style={cardStyle}>
                 <Card.Body>
                     <Card.Title>{this.props.title}</Card.Title>
-                    <Image style={imageStyle} src={this.props.image_path} />
+                    <Image style={imageStyle} src={`data:image/png;base64,${this.imageContent}`} />
                     {this.props.children}
                 </Card.Body>
             </Card>
