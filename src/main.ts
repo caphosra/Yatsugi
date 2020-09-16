@@ -15,6 +15,7 @@ function createWindow() {
     const mainWindow = new BrowserWindow({
         height: 600,
         width: 800,
+        icon: path.join(assetDir, "goout.png"),
         webPreferences: {
             // Forgive me... I will fix it.
             nodeIntegration: true
@@ -31,9 +32,6 @@ function createWindow() {
     }
 
     ipcMain.on("assetfolder", e => {
-        const assetDir = app.isPackaged
-            ? path.join(process.resourcesPath, "assets")
-            : path.join(__dirname, "../assets");
         e.returnValue = assetDir;
     });
 
