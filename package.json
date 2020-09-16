@@ -1,7 +1,7 @@
 {
     "name": "yatsugi",
-    "version": "1.0.0",
-    "description": "Support to create a list of problems and print it out",
+    "version": "2.0.0",
+    "description": "文化祭における器材貸し出しをスムーズに進める為のツールです.",
     "main": "./dist/main.js",
     "scripts": {
         "clean": "rmdir dist /s /q && rmdir bin /s /q",
