@@ -1,6 +1,7 @@
 # Yatsugi - 文化祭器材管理システム
 
 ![Build](https://github.com/capra314cabra/Yatsugi/workflows/Build/badge.svg)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/capra314cabra/yatsugi?include_prereleases)
 
 文化祭における器材貸し出しをスムーズに進める為のツールです.
 
