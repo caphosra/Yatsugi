@@ -1,9 +1,14 @@
 import { app, BrowserWindow, ipcMain, Menu } from "electron";
 import * as path from "path";
+import * as fs from "fs";
 import * as process from "process";
 
 import { initDatabase } from "./dataServer";
 import { initQRcodeServer } from "./qrcodeServer";
+
+const assetDir = app.isPackaged
+    ? path.join(process.resourcesPath, "assets")
+    : path.join(__dirname, "../assets");
 
 function createWindow() {
     // Create the browser window.
@@ -11,6 +16,7 @@ function createWindow() {
         height: 600,
         width: 800,
         webPreferences: {
+            // Forgive me... I will fix it.
             nodeIntegration: true
         }
     });
@@ -29,6 +35,11 @@ function createWindow() {
             ? path.join(process.resourcesPath, "assets")
             : path.join(__dirname, "../assets");
         e.returnValue = assetDir;
+    });
+
+    ipcMain.on("load-image", (e, imagePath) => {
+        const buffer = fs.readFileSync(path.join(assetDir, imagePath));
+        e.returnValue = buffer.toString("base64");
     });
 }
 
