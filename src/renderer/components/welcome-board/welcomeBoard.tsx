@@ -1,8 +1,6 @@
 import * as React from "react";
-import * as path from "path";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { RouteComponentProps, Link, withRouter } from "react-router-dom";
-import { ipcRenderer } from "electron";
 
 import keyEventManager from "../../keyEventManager";
 import { SelectModePanel } from './selectModePanel';
@@ -22,8 +20,6 @@ export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBo
 
         keyEventManager.eventList = [];
     }
-
-    imageResourceDir: string = ipcRenderer.sendSync("assetfolder");
 
     render() {
         const titleStyle: React.CSSProperties = {
@@ -51,7 +47,7 @@ export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBo
                 </h1>
                 <Container><Row>
                     <Col>
-                        <SelectModePanel title="貸し出す" image_path={path.join(this.imageResourceDir, "goout.png")}>
+                        <SelectModePanel title="貸し出す" imagePath="goout.png">
                             <Link to="/lent">
                                 <Button style={buttonStyle} variant="success">
                                     開始
@@ -60,7 +56,7 @@ export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBo
                         </SelectModePanel>
                     </Col>
                     <Col>
-                        <SelectModePanel title="返却する" image_path={path.join(this.imageResourceDir, "back.png")}>
+                        <SelectModePanel title="返却する" imagePath="back.png">
                             <Link to="/return">
                                 <Button style={buttonStyle} variant="danger">
                                     開始
@@ -69,7 +65,7 @@ export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBo
                         </SelectModePanel>
                     </Col>
                     <Col>
-                        <SelectModePanel title="管理" image_path={path.join(this.imageResourceDir, "manage.png")}>
+                        <SelectModePanel title="管理" imagePath="manage.png">
                             <Link to="/group/list">
                                 <Button style={buttonStyle} variant="primary">
                                     団体リスト
