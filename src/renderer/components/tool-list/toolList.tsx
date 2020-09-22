@@ -24,14 +24,14 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
 
         this.state = {
             editMode: false,
-            editTool: new YatsugiTool({ id: "", name: "", records: [] })
+            editTool: new YatsugiTool({ id: "", name: "", tag: 0, records: [] })
         };
     }
 
     addToolButtonClicked = () => {
         this.setState({
             editMode: true,
-            editTool: new YatsugiTool({ id: uuid(), name: "Untitled", records: [] })
+            editTool: new YatsugiTool({ id: uuid(), name: "Untitled", tag: 0, records: [] })
         });
     }
 
