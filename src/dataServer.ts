@@ -1,5 +1,6 @@
 import { ipcMain } from "electron";
 
+import { groupLoader, toolLoader } from "./lib/dataLoader";
 import { ToolRecord } from "./lib/toolRecords";
 import { YatsugiGroup } from "./lib/yatsugiGroup";
 import { YatsugiTool } from "./lib/yatsugiTool";
@@ -8,7 +9,7 @@ let groups: YatsugiGroup[] = [];
 let tools: YatsugiTool[] = [];
 
 export function initDatabase() {
-    YatsugiGroup.loadAllAsync()
+    groupLoader.loadAllAsync()
         .then((val) => {
             groups = val;
         })
@@ -16,7 +17,7 @@ export function initDatabase() {
             console.error(err);
         });
 
-    YatsugiTool.loadAllAsync()
+    toolLoader.loadAllAsync()
         .then((val) => {
             tools = val;
         })
@@ -27,46 +28,31 @@ export function initDatabase() {
     //
     // Response on database-load
     //
-    ipcMain.on("database-load", (e) => {
-        YatsugiGroup.loadAllAsync()
-            .then((val) => {
-                groups = val;
-                YatsugiTool.loadAllAsync()
-                .then((val) => {
-                    tools = val;
-                    e.sender.send("database-load-reply", true);
-                })
-                .catch((err) => {
-                    console.error(err);
-                    e.sender.send("database-load-reply", false);
-                });
-            })
-            .catch((err) => {
-                console.error(err);
-                e.sender.send("database-load-reply", false);
-            });
+    ipcMain.on("database-load", async (e) => {
+        try {
+            groups = await groupLoader.loadAllAsync();
+            tools = await toolLoader.loadAllAsync();
+            e.sender.send("database-load-reply", true);
+        }
+        catch (err) {
+            console.error(err);
+            e.sender.send("database-load-reply", false);
+        }
     });
 
     //
     // Response on database-save
     //
-    ipcMain.on("database-save", (e) => {
-        // Save YatsugiGroup
-        YatsugiGroup.saveAllAsync(groups)
-            .then(() => {
-                YatsugiTool.saveAllAsync(tools)
-                .then(() => {
-                    e.sender.send("database-save-reply", true);
-                })
-                .catch((err) => {
-                    console.error(err);
-                    e.sender.send("database-save-reply", false);
-                });
-            })
-            .catch((err) => {
-                console.error(err);
-                e.sender.send("database-save-reply", false);
-            });
+    ipcMain.on("database-save", async (e) => {
+        try {
+            await groupLoader.saveAllAsync(groups);
+            await toolLoader.saveAllAsync(tools);
+            e.sender.send("database-save-reply", true);
+        }
+        catch (err) {
+            console.error(err);
+            e.sender.send("database-save-reply", false);
+        }
     });
 
     //
@@ -116,124 +102,129 @@ export function initDatabase() {
     //
     // Response on database-add-group
     //
-    ipcMain.on("database-add-group", (e, group) => {
+    ipcMain.on("database-add-group", async (e, group) => {
         const groupInstance = group as YatsugiGroup;
         groups = groups.filter((val) => {
             return val.id != groupInstance.id;
         });
         groups.push(groupInstance);
-        YatsugiGroup.saveAllAsync(groups)
-            .then(() => {
-                e.sender.send("database-add-group-reply", true);
-            })
-            .catch((err) => {
-                console.error(err);
-                e.sender.send("database-add-group-reply", false);
-            });
+
+        try {
+            await groupLoader.saveAllAsync(groups);
+            e.sender.send("database-add-group-reply", true);
+        }
+        catch (err) {
+            console.error(err);
+            e.sender.send("database-add-group-reply", false);
+        }
     });
 
     //
     // Response on database-add-tool
     //
-    ipcMain.on("database-add-tool", (e, tool) => {
+    ipcMain.on("database-add-tool", async (e, tool) => {
         const toolInstance = tool as YatsugiTool;
         tools = tools.filter((val) => {
             return val.id != toolInstance.id;
         });
         tools.push(toolInstance);
-        YatsugiTool.saveAllAsync(tools)
-            .then(() => {
-                e.sender.send("database-add-tool-reply", true);
-            })
-            .catch((err) => {
-                console.error(err);
-                e.sender.send("database-add-tool-reply", false);
-            });
+
+        try {
+            await toolLoader.saveAllAsync(tools);
+            e.sender.send("database-add-tool-reply", true);
+        }
+        catch (err) {
+            console.error(err);
+            e.sender.send("database-add-tool-reply", false);
+        }
     });
 
     //
     // Response on database-delete-group
     //
-    ipcMain.on("database-delete-group", (e, id) => {
+    ipcMain.on("database-delete-group", async (e, id) => {
         groups = groups.filter((val) => {
             return val.id != id;
         });
-        YatsugiGroup.saveAllAsync(groups)
-            .then(() => {
-                e.sender.send("database-delete-group-reply", true);
-            })
-            .catch((err) => {
-                console.error(err);
-                e.sender.send("database-delete-group-reply", false);
-            });
+
+        try {
+            await groupLoader.saveAllAsync(groups);
+            e.sender.send("database-delete-group-reply", true);
+        }
+        catch (err) {
+            console.error(err);
+            e.sender.send("database-delete-group-reply", false);
+        }
     });
 
     //
     // Response on database-delete-tool
     //
-    ipcMain.on("database-delete-tool", (e, id) => {
+    ipcMain.on("database-delete-tool", async (e, id) => {
         tools = tools.filter((val) => {
             return val.id != id;
         });
-        YatsugiTool.saveAllAsync(tools)
-            .then(() => {
-                e.sender.send("database-delete-tool-reply", true);
-            })
-            .catch((err) => {
-                console.error(err);
-                e.sender.send("database-delete-tool-reply", false);
-            });
+
+        try {
+            await toolLoader.saveAllAsync(tools);
+            e.sender.send("database-delete-tool-reply", true);
+        }
+        catch (err) {
+            console.error(err);
+            e.sender.send("database-delete-tool-reply", false);
+        }
     });
 
     //
     // Response on database-lent-tool
     //
-    ipcMain.on("database-lent-tool", (e, groupID, toolID) => {
-        for (const tool of tools) {
-            if (tool.id == toolID) {
-                tool.records.push(
-                    new ToolRecord({
-                        startTime: Date.now(),
-                        endTime: undefined,
-                        groupID: groupID
-                    })
-                );
-                YatsugiTool.saveAllAsync(tools)
-                    .then(() => {
-                        e.sender.send("database-lent-tool-reply", true);
-                    })
-                    .catch((err) => {
-                        console.error(err);
-                        e.sender.send("database-lent-tool-reply", false);
-                    });
-                return;
+    ipcMain.on("database-lent-tool", async (e, groupID, toolID) => {
+        try {
+            for (const tool of tools) {
+                if (tool.id == toolID) {
+                    tool.records.push(
+                        new ToolRecord({
+                            startTime: Date.now(),
+                            endTime: undefined,
+                            groupID: groupID
+                        })
+                    );
+
+                    await toolLoader.saveAllAsync(tools);
+                    e.sender.send("database-lent-tool-reply", true);
+                    return;
+                }
             }
+            throw "No one is matched!";
         }
-        e.sender.send("database-lent-tool-reply", false);
+        catch (err) {
+            console.error(err);
+            e.sender.send("database-lent-tool-reply", false);
+        }
     });
 
     //
     // Response on database-return-tool
     //
-    ipcMain.on("database-return-tool", (e, toolID) => {
-        for (const tool of tools) {
-            if (tool.id == toolID) {
-                tool.records = tool.records.map((record) => {
-                    record.endTime = Date.now();
-                    return record;
-                });
-                YatsugiTool.saveAllAsync(tools)
-                    .then(() => {
-                        e.sender.send("database-return-tool-reply", true);
-                    })
-                    .catch((err) => {
-                        console.error(err);
-                        e.sender.send("database-return-tool-reply", false);
+    ipcMain.on("database-return-tool", async (e, toolID) => {
+        try {
+            for (const tool of tools) {
+                if (tool.id == toolID) {
+                    tool.records = tool.records.map((record) => {
+                        record.endTime = Date.now();
+                        return record;
                     });
-                return;
+
+                    await toolLoader.saveAllAsync(tools)
+                    e.sender.send("database-return-tool-reply", true);
+                    return;
+                }
             }
         }
-        e.sender.send("database-return-tool-reply", false);
+        catch (err) {
+            console.error(err);
+            e.sender.send("database-return-tool-reply", false);
+        }
     });
 
     //
