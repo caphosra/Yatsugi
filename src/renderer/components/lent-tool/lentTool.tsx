@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Button, Card, Table } from "react-bootstrap";
-import { useHistory, RouteComponentProps, withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { showInfoDialog, showErrorDialog } from "../../showDialog";
 import keyEventManager from "../../keyEventManager";
@@ -84,7 +84,7 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
             try {
                 await toolData.lentItem(this.state.group.id, this.state.tools.map(tool => tool.id));
                 await showInfoDialog("貸出完了しました。");
-                useHistory().push("/");
+                this.props.history.push("/");
             }
             catch (err) {
                 await showErrorDialog(err);
