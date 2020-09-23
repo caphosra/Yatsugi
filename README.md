@@ -22,6 +22,7 @@ git checkout csharp-HEAD
 |:---|:---:|:---|:---|
 |database-load|||boolean|
 |database-save|||boolean|
+|database-lending|:heavy_check_mark:||boolean|
 |database-check-group|:heavy_check_mark:|string|YatsugiGroup \| null|
 |database-check-tool|:heavy_check_mark:|string|YatsugiTool \| null|
 |database-find-groups|:heavy_check_mark:|string|YatsugiGroup[]|
