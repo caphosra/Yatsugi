@@ -5,6 +5,8 @@ import * as process from "process";
 
 import { initDatabase } from "./dataServer";
 import { initQRcodeServer } from "./qrcodeServer";
+import { YatsugiSettings } from "./lib/yatsugiSettings";
+import { settingLoader } from "./lib/dataLoader";
 
 const assetDir = app.isPackaged
     ? path.join(process.resourcesPath, "assets")
@@ -70,3 +72,12 @@ app.on("window-all-closed", () => {
 
 initDatabase();
 initQRcodeServer();
+
+ipcMain.handle("settings-load", async (e) => {
+    const settings = await settingLoader.loadAsync();
+    return settings;
+});
+
+ipcMain.handle("settings-save", async (e, settings: YatsugiSettings) => {
+    await settingLoader.saveAsync(settings);
+});

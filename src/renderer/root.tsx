@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Switch, Route, Link } from "react-router-dom";
 
+import { SettingsViewWithRouter } from "./components/settings/settingsView";
 import { LentToolWithRouter } from "./components/lent-tool/lentTool";
 import { ReturnToolWithRouter } from "./components/return-tool/returnTool";
 import { WelcomeBoardWithRouter } from "./components/welcome-board/welcomeBoard";
@@ -46,6 +47,7 @@ export class RootContent extends React.Component<IRootContentProps, IRootContent
                     </div>
                 </Link>
                 <Switch>
+                    <Route path="/settings" component={SettingsViewWithRouter} />
                     <Route path="/lent" component={LentToolWithRouter} />
                     <Route path="/return" component={ReturnToolWithRouter} />
                     <Route path="/group/list" component={GroupListWithRouter} />
