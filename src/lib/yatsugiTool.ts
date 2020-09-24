@@ -3,16 +3,19 @@ import * as fs from "fs";
 import glob from "glob";
 import { app } from "electron";
 
+import { ToolTag } from "./yatsugiTag";
 import { ToolRecord } from "./toolRecords"
 
 export class YatsugiTool {
     id: string;
     name: string;
+    tag: ToolTag;
     records: ToolRecord[];
 
-    constructor(item: { id: string, name: string, records: ToolRecord[] }) {
+    constructor(item: { id: string, name: string, tag: ToolTag, records: ToolRecord[] }) {
         this.id = item.id;
         this.name = item.name;
+        this.tag = item.tag;
         this.records = item.records.map(record => new ToolRecord(record));
     }
 
@@ -57,7 +60,7 @@ export class YatsugiTool {
                 const groupID = val.split(",")[2];
                 return new ToolRecord({ startTime, endTime, groupID });
             });
-        return new YatsugiTool({ id: id, name: name, records: records });
+        return new YatsugiTool({ id: id, name: name, tag: ToolTag.SAW, records: records });
     }
 
     static parseToString(tool: YatsugiTool) {

@@ -56,6 +56,13 @@ export function initDatabase() {
     });
 
     //
+    // Response on database-lending
+    //
+    ipcMain.on("database-lending", async (e) => {
+        e.returnValue = tools.some((val) => new YatsugiTool(val).getGroup() != null);
+    });
+
+    //
     // Response on database-check-group
     //
     ipcMain.on("database-check-group", (e, id) => {

@@ -6,6 +6,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { showErrorDialog } from "../../showDialog";
 import { openQrCodeDialog } from "../../../lib/qrcodeGenerator";
 import { ToolEditor } from "./toolEditor";
+import { toString } from "../../../lib/yatsugiTag";
 import { YatsugiTool } from "../../../lib/yatsugiTool";
 import { groupData, toolData } from "../../dataManager";
 
@@ -24,14 +25,14 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
 
         this.state = {
             editMode: false,
-            editTool: new YatsugiTool({ id: "", name: "", records: [] })
+            editTool: new YatsugiTool({ id: "", name: "", tag: 0, records: [] })
         };
     }
 
     addToolButtonClicked = () => {
         this.setState({
             editMode: true,
-            editTool: new YatsugiTool({ id: uuid(), name: "Untitled", records: [] })
+            editTool: new YatsugiTool({ id: uuid(), name: "Untitled", tag: 0, records: [] })
         });
     }
 
@@ -108,6 +109,7 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
                                 <tr>
                                     <th>器材名</th>
                                     <th>貸出先</th>
+                                    <th>タグ</th>
                                     <th>管理</th>
                                 </tr>
                             </thead>
@@ -140,6 +142,7 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
                                                         }
                                                     })()
                                                 }
+                                                <td>{toString(val.tag)}</td>
                                                 <td style={{ width: 150 }}>
                                                     <i className="fas fa-edit" onClick={() => this.editToolButtonClicked(val)}></i>
                                                     &nbsp;&nbsp;

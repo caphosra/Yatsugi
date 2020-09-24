@@ -1,4 +1,5 @@
 import * as React from "react";
+import { ipcRenderer } from "electron";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { RouteComponentProps, Link, withRouter } from "react-router-dom";
 
@@ -10,13 +11,15 @@ export interface IWelcomeBoardProps extends RouteComponentProps {
 }
 
 export interface IWelcomeBoardState {
-
+    lending: boolean;
 }
 
 export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBoardState> {
     constructor(props: IWelcomeBoardProps) {
         super(props);
-        this.state = { };
+        this.state = {
+            lending: ipcRenderer.sendSync("database-lending")
+        };
 
         keyEventManager.eventList = [];
     }
@@ -62,6 +65,7 @@ export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBo
                                     開始
                                 </Button>
                             </Link>
+                            {this.state.lending ? <p style={{ color: "red" }}>貸出器材あり</p> : undefined}
                         </SelectModePanel>
                     </Col>
                     <Col>
