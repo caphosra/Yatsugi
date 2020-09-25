@@ -18,28 +18,28 @@ git checkout csharp-HEAD
 
 ## IPC channels 一覧
 
-|channel|sync|args|return|
-|:---|:---:|:---|:---|
-|database-load|||boolean|
-|database-save|||boolean|
-|database-lending|:heavy_check_mark:||boolean|
-|database-check-group|:heavy_check_mark:|string|YatsugiGroup \| null|
-|database-check-tool|:heavy_check_mark:|string|YatsugiTool \| null|
-|database-find-groups|:heavy_check_mark:|string|YatsugiGroup[]|
-|database-find-tools|:heavy_check_mark:|string|YatsugiTool[]|
-|database-add-group||YatsugiGroup|boolean|
-|database-add-tool||YatsugiTool|boolean|
-|database-delete-group||string|boolean|
-|database-delete-tool||string|boolean|
-|database-lent-tool||string, string|boolean|
-|database-return-tool||string|boolean|
-|database-get-all-groups|:heavy_check_mark:||YatsugiGroup[]|
-|database-get-all-tools|:heavy_check_mark:||YatsugiTool[]|
-|settings-load|||YatsugiSettings|
-|settings-save||YatsugiSettings||
-|qrcode-save||string, string|boolean|
-|load-image|:heavy_check_mark:|string|string|
-|assetfolder|||string|
-|opendev||||
+|channel|args|return|
+|:---|:---|:---|
+|database-load||boolean|
+|database-save||boolean|
+|database-lending||boolean|
+|database-check-group|string|YatsugiGroup \| null|
+|database-check-tool|string|YatsugiTool \| null|
+|database-find-groups|string|YatsugiGroup[]|
+|database-find-tools|string|YatsugiTool[]|
+|database-add-group|YatsugiGroup|boolean|
+|database-add-tool|YatsugiTool|boolean|
+|database-delete-group|string|boolean|
+|database-delete-tool|string|boolean|
+|database-lent-tool|string, string|boolean|
+|database-return-tool|string|boolean|
+|database-get-all-groups||YatsugiGroup[]|
+|database-get-all-tools||YatsugiTool[]|
+|settings-load||YatsugiSettings|
+|settings-save|YatsugiSettings||
+|qrcode-save|string, string|boolean|
+|load-image|string|string|
+|assetfolder||string|
+|opendev|||
 
 `database-check-*`はIDで検索するのに対して、`database-find-*`は文字列で検索をします。
