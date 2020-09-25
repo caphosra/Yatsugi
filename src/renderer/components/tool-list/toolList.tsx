@@ -7,6 +7,7 @@ import { showErrorDialog } from "../../showDialog";
 import { openQrCodeDialog } from "../../../lib/qrcodeGenerator";
 import { ToolEditor } from "./toolEditor";
 import { toString } from "../../../lib/yatsugiTag";
+import { YatsugiGroup } from "../../../lib/yatsugiGroup";
 import { YatsugiTool } from "../../../lib/yatsugiTool";
 import { groupData, toolData } from "../../dataManager";
 
@@ -17,6 +18,9 @@ export interface IToolListProps extends RouteComponentProps {
 export interface IToolListState {
     editMode: boolean;
     editTool: YatsugiTool;
+
+    groups: YatsugiGroup[];
+    tools: YatsugiTool[];
 }
 
 export class ToolList extends React.Component<IToolListProps, IToolListState> {
@@ -25,8 +29,19 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
 
         this.state = {
             editMode: false,
-            editTool: new YatsugiTool({ id: "", name: "", tag: 0, records: [] })
+            editTool: new YatsugiTool({ id: "", name: "", tag: 0, records: [] }),
+            groups: [],
+            tools: []
         };
+
+        this.loadContents();
+    }
+
+    async loadContents() {
+        this.setState({
+            groups: await groupData.gets(),
+            tools: await toolData.gets()
+        });
     }
 
     addToolButtonClicked = () => {
@@ -47,27 +62,24 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
         await openQrCodeDialog(id);
     };
 
-    deleteToolButtonClicked = (id: string) => {
-        showErrorDialog(
+    deleteToolButtonClicked = async (id: string) => {
+        const result = await showErrorDialog(
             "本当に削除しますか?\nもう戻って来ない事も理解していますよね? いたずらじゃないですよね? 開発者は責任を一切負いませんよ?",
             ["OK", "Cancel"]
-        ).then((val) => {
-            if (val.response == 0) {
-                toolData.delete(id)
-                    .then(() => {
-                        this.forceUpdate();
-                    })
-                    .catch((err) => {
-                        console.error(err);
-                    });
-            }
-        });
+        );
+
+        if (result.response == 0) {
+            await toolData.delete(id);
+            await this.loadContents();
+        }
     }
 
     onEditModeFinished = (changed: boolean) => {
         this.setState({
             editMode: false
         });
+
+        this.loadContents();
     }
 
     render() {
@@ -115,7 +127,7 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
                             </thead>
                             <tbody>
                                 {
-                                    toolData.gets().map((val) => {
+                                    this.state.tools.map((val) => {
                                         return (
                                             <tr>
                                                 <td>{val.name}</td>
@@ -123,10 +135,10 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
                                                     (() => {
                                                         const id = val.getGroup();
                                                         if (id) {
-                                                            const name = groupData.findByID(id)?.name;
-                                                            if (name) {
+                                                            const group = this.state.groups.find((idx) => idx.id == id);
+                                                            if (group) {
                                                                 return (
-                                                                    <td style={{ textAlign: "center", color: "red" }}>{name}</td>
+                                                                    <td style={{ textAlign: "center", color: "red" }}>{group.name}</td>
                                                                 );
                                                             }
                                                             else {

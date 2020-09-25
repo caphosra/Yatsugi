@@ -18,10 +18,18 @@ export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBo
     constructor(props: IWelcomeBoardProps) {
         super(props);
         this.state = {
-            lending: ipcRenderer.sendSync("database-lending")
+            lending: false
         };
 
+        this.isLending();
         keyEventManager.eventList = [];
+    }
+
+    async isLending() {
+        const lending: boolean = await ipcRenderer.invoke("database-lending");
+        this.setState({
+            lending: lending
+        });
     }
 
     render() {
