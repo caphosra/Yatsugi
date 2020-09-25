@@ -2,13 +2,13 @@ import { ipcMain } from "electron";
 import QRCode from "qrcode";
 
 export function initQRcodeServer() {
-    ipcMain.on("qrcode-save", (e, path, text) => {
-        QRCode.toFile(path, text)
-            .then(() => {
-                e.sender.send("qrcode-save-reply", true);
-            })
-            .catch(() => {
-                e.sender.send("qrcode-save-reply", false);
-            });
+    ipcMain.handle("qrcode-save", async (e, path: string, text: string) => {
+        try {
+            await QRCode.toFile(path, text);
+            return true;
+        }
+        catch (err) {
+            return false;
+        }
     });
 }
