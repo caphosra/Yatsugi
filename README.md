@@ -40,5 +40,6 @@ git checkout csharp-HEAD
 |qrcode-save||string, string|boolean|
 |load-image|:heavy_check_mark:|string|string|
 |assetfolder|||string|
+|opendev||||
 
 `database-check-*`はIDで検索するのに対して、`database-find-*`は文字列で検索をします。
