@@ -27,12 +27,12 @@ export class ReturnTool extends React.Component<IReturnToolProps, IReturnToolSta
 
     currentText: string = "";
 
-    onKeyDown = (e: KeyboardEvent) => {
+    onKeyDown = async (e: KeyboardEvent) => {
         if (e.key == "Enter") {
             const id = this.currentText;
             this.currentText = "";
 
-            const toolLoaded = toolData.findByID(id);
+            const toolLoaded = await toolData.findByID(id);
             if (toolLoaded) {
                 const tools = this.state.tools.filter((tool) => {
                     return tool.id != toolLoaded.id;
@@ -49,7 +49,7 @@ export class ReturnTool extends React.Component<IReturnToolProps, IReturnToolSta
         }
         else if (e.key == "F5") {
             this.setState({
-                tools: toolData.gets()
+                tools: await toolData.gets()
             });
         }
         else {

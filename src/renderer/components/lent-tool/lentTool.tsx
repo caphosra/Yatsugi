@@ -30,12 +30,12 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
 
     currentText: string = "";
 
-    onKeyDown = (e: KeyboardEvent) => {
+    onKeyDown = async (e: KeyboardEvent) => {
         if (e.key == "Enter") {
             const id = this.currentText;
             this.currentText = "";
 
-            const groupLoaded = groupData.findByID(id);
+            const groupLoaded = await groupData.findByID(id);
             if (groupLoaded) {
                 this.setState({
                     group: groupLoaded
@@ -43,7 +43,7 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
                 return;
             }
 
-            const toolLoaded = toolData.findByID(id);
+            const toolLoaded = await toolData.findByID(id);
             if (toolLoaded) {
                 const tools = this.state.tools.filter((tool) => {
                     return tool.id != toolLoaded.id;
@@ -60,8 +60,8 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
         }
         else if (e.key == "F5") {
             this.setState({
-                group: groupData.gets()[0],
-                tools: toolData.gets()
+                group: (await groupData.gets())[0],
+                tools: await toolData.gets()
             });
         }
         else {

@@ -8,18 +8,25 @@ export interface ISelectModePanelProps {
 }
 
 export interface ISelectModePanelState {
-
+    imageContent: string;
 }
 
 export class SelectModePanel extends React.Component<ISelectModePanelProps, ISelectModePanelState> {
     constructor(props: ISelectModePanelProps) {
         super(props);
-        this.state = { };
+        this.state = {
+            imageContent: ""
+        };
 
-        this.imageContent = ipcRenderer.sendSync("load-image", this.props.imagePath);
+        this.loadImage();
     }
 
-    imageContent = "";
+    async loadImage() {
+        const content = await ipcRenderer.invoke("load-image", this.props.imagePath);
+        this.setState({
+            imageContent: content
+        });
+    }
 
     render() {
         const cardStyle: React.CSSProperties = {
@@ -37,7 +44,7 @@ export class SelectModePanel extends React.Component<ISelectModePanelProps, ISel
             <Card style={cardStyle}>
                 <Card.Body>
                     <Card.Title>{this.props.title}</Card.Title>
-                    <Image style={imageStyle} src={`data:image/png;base64,${this.imageContent}`} />
+                    <Image style={imageStyle} src={`data:image/png;base64,${this.state.imageContent}`} />
                     {this.props.children}
                 </Card.Body>
             </Card>

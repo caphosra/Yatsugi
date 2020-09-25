@@ -30,17 +30,10 @@ function createWindow() {
     Menu.setApplicationMenu(null);
 
     if (process.env.NODE_ENV == "development") {
-        mainWindow.webContents.openDevTools();
+        ipcMain.handle("opendev", (e) => {
+            mainWindow.webContents.openDevTools();
+        });
     }
-
-    ipcMain.on("assetfolder", e => {
-        e.returnValue = assetDir;
-    });
-
-    ipcMain.on("load-image", (e, imagePath) => {
-        const buffer = fs.readFileSync(path.join(assetDir, imagePath));
-        e.returnValue = buffer.toString("base64");
-    });
 }
 
 // This method will be called when Electron has finished
@@ -72,6 +65,15 @@ app.on("window-all-closed", () => {
 
 initDatabase();
 initQRcodeServer();
+
+ipcMain.handle("assetfolder", e => {
+    return assetDir;
+});
+
+ipcMain.handle("load-image", (e, imagePath: string) => {
+    const buffer = fs.readFileSync(path.join(assetDir, imagePath));
+    return buffer.toString("base64");
+});
 
 ipcMain.handle("settings-load", async (e) => {
     const settings = await settingLoader.loadAsync();

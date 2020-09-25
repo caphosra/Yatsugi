@@ -8,8 +8,8 @@ class KeyEventManager {
     }
 
     private call = (e: KeyboardEvent) => {
-        if (e.key == "F11") {
-            ipcRenderer.send("opendev");
+        if (e.key == "F12") {
+            ipcRenderer.invoke("opendev");
         }
 
         for (const eventHandler of this.eventList) {

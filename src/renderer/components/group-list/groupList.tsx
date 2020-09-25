@@ -7,6 +7,7 @@ import { showErrorDialog } from "../../showDialog";
 import { openQrCodeDialog } from "../../../lib/qrcodeGenerator";
 import { GroupEditor } from "./groupEditor";
 import { YatsugiGroup } from "../../../lib/yatsugiGroup";
+import { YatsugiTool } from "../../../lib/yatsugiTool";
 import { toolData, groupData } from "../../dataManager";
 
 export interface IGroupListProps extends RouteComponentProps {
@@ -16,6 +17,9 @@ export interface IGroupListProps extends RouteComponentProps {
 export interface IGroupListState {
     editMode: boolean;
     editGroup: YatsugiGroup;
+
+    groups: YatsugiGroup[];
+    tools: YatsugiTool[];
 }
 
 export class GroupList extends React.Component<IGroupListProps, IGroupListState> {
@@ -24,8 +28,19 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
 
         this.state = {
             editMode: false,
-            editGroup: new YatsugiGroup({ id: "", name: "" })
+            editGroup: new YatsugiGroup({ id: "", name: "" }),
+            groups: [],
+            tools: []
         };
+
+        this.loadContents();
+    }
+
+    async loadContents() {
+        this.setState({
+            groups: await groupData.gets(),
+            tools: await toolData.gets()
+        });
     }
 
     addGroupButtonClicked = () => {
@@ -46,27 +61,24 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
         await openQrCodeDialog(id);
     };
 
-    deleteGroupButtonClicked = (id: string) => {
-        showErrorDialog(
+    deleteGroupButtonClicked = async (id: string) => {
+        const result = await showErrorDialog(
             "本当に削除しますか?\nもう戻って来ない事も理解していますよね? いたずらじゃないですよね? 開発者は責任を一切負いませんよ?",
             ["OK", "Cancel"]
-        ).then((val) => {
-            if (val.response == 0) {
-                groupData.delete(id)
-                    .then(() => {
-                        this.forceUpdate();
-                    })
-                    .catch((err) => {
-                        console.error(err);
-                    });
-            }
-        });
+        )
+
+        if (result.response == 0) {
+            await groupData.delete(id);
+            await this.loadContents();
+        }
     }
 
-    onEditModeFinished = (changed: boolean) => {
+    onEditModeFinished = () => {
         this.setState({
             editMode: false
         });
+
+        this.loadContents();
     }
 
     render() {
@@ -113,13 +125,13 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
                             </thead>
                             <tbody>
                                 {
-                                    groupData.gets().map((val) => {
+                                    this.state.groups.map((val) => {
                                         return (
                                             <tr>
                                                 <td>{val.name}</td>
                                                 {
                                                     (() => {
-                                                        const item = val.getLentToolCount(toolData.gets());
+                                                        const item = val.getLentToolCount(this.state.tools);
                                                         return (
                                                             item == 0
                                                                 ? <td style={{ textAlign: "center" }}>---</td>
