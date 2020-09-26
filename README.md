@@ -7,9 +7,9 @@
 [Repo](https://github.com/capra314cabra/Yatsugi) | [Author](https://github.com/capra314cabra)
 
 文化祭における器材貸し出しをスムーズに進める為のツールです.  
-まだ十分に拡張の余地はありますのでためらわずcontributeしてください.
+まだ十分に拡張の余地はありますのでためらわずcontributeしてください!
 
-![Example](https://raw.githubusercontent.com/capra314cabra/Yatsugi/master/img/example.png)
+![Example](https://media.githubusercontent.com/media/capra314cabra/Yatsugi/master/img/example.png)
 
 ## 注意
 
