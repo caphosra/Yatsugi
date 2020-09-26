@@ -135,7 +135,7 @@ export class GroupList extends React.Component<IGroupListProps, IGroupListState>
                                                         return (
                                                             item == 0
                                                                 ? <td style={{ textAlign: "center" }}>---</td>
-                                                                : <td style={{ textAlign: "center", color: "red" }}>{item}</td>
+                                                                : <td style={{ textAlign: "center", color: "red" }} onClick={() => this.props.history.push(`/tool/list/${val.id}`)}>{item}</td>
                                                         );
                                                     })()
                                                 }

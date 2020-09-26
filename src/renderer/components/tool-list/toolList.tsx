@@ -11,7 +11,11 @@ import { YatsugiGroup } from "../../../lib/yatsugiGroup";
 import { YatsugiTool } from "../../../lib/yatsugiTool";
 import { groupData, toolData } from "../../dataManager";
 
-export interface IToolListProps extends RouteComponentProps {
+export interface IToolListFilter {
+    groupFilter: string | undefined;
+}
+
+export interface IToolListProps extends RouteComponentProps<IToolListFilter> {
 
 }
 
@@ -127,44 +131,46 @@ export class ToolList extends React.Component<IToolListProps, IToolListState> {
                             </thead>
                             <tbody>
                                 {
-                                    this.state.tools.map((val) => {
-                                        return (
-                                            <tr>
-                                                <td>{val.name}</td>
-                                                {
-                                                    (() => {
-                                                        const id = val.getGroup();
-                                                        if (id) {
-                                                            const group = this.state.groups.find((idx) => idx.id == id);
-                                                            if (group) {
-                                                                return (
-                                                                    <td style={{ textAlign: "center", color: "red" }}>{group.name}</td>
-                                                                );
+                                    this.state.tools
+                                        .filter((val) => this.props.match.params.groupFilter == undefined || val.getGroup() == this.props.match.params.groupFilter)
+                                        .map((val) => {
+                                            return (
+                                                <tr>
+                                                    <td>{val.name}</td>
+                                                    {
+                                                        (() => {
+                                                            const id = val.getGroup();
+                                                            if (id) {
+                                                                const group = this.state.groups.find((idx) => idx.id == id);
+                                                                if (group) {
+                                                                    return (
+                                                                        <td style={{ textAlign: "center", color: "red" }}>{group.name}</td>
+                                                                    );
+                                                                }
+                                                                else {
+                                                                    return (
+                                                                        <td style={{ textAlign: "center", color: "red" }}>不明</td>
+                                                                    );
+                                                                }
                                                             }
                                                             else {
                                                                 return (
-                                                                    <td style={{ textAlign: "center", color: "red" }}>不明</td>
+                                                                    <td style={{ textAlign: "center" }}>---</td>
                                                                 );
                                                             }
-                                                        }
-                                                        else {
-                                                            return (
-                                                                <td style={{ textAlign: "center" }}>---</td>
-                                                            );
-                                                        }
-                                                    })()
-                                                }
-                                                <td>{toString(val.tag)}</td>
-                                                <td style={{ width: 150 }}>
-                                                    <i className="fas fa-edit" onClick={() => this.editToolButtonClicked(val)}></i>
-                                                    &nbsp;&nbsp;
-                                                    <i className="fas fa-qrcode" onClick={() => this.qrCodeButtonClicked(val.id)}></i>
-                                                    &nbsp;&nbsp;
-                                                    <i className="fas fa-trash" onClick={() => this.deleteToolButtonClicked(val.id)}></i>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
+                                                        })()
+                                                    }
+                                                    <td>{toString(val.tag)}</td>
+                                                    <td style={{ width: 150 }}>
+                                                        <i className="fas fa-edit" onClick={() => this.editToolButtonClicked(val)}></i>
+                                                        &nbsp;&nbsp;
+                                                        <i className="fas fa-qrcode" onClick={() => this.qrCodeButtonClicked(val.id)}></i>
+                                                        &nbsp;&nbsp;
+                                                        <i className="fas fa-trash" onClick={() => this.deleteToolButtonClicked(val.id)}></i>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
                                 }
                             </tbody>
                         </Table>

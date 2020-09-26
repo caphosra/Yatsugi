@@ -51,6 +51,7 @@ export class RootContent extends React.Component<IRootContentProps, IRootContent
                     <Route path="/lent" component={LentToolWithRouter} />
                     <Route path="/return" component={ReturnToolWithRouter} />
                     <Route path="/group/list" component={GroupListWithRouter} />
+                    <Route path="/tool/list/:groupFilter" component={ToolListWithRouter} />
                     <Route path="/tool/list" component={ToolListWithRouter} />
                     <Route component={WelcomeBoardWithRouter} />
                 </Switch>
