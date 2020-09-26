@@ -4,6 +4,8 @@ import { groupLoader, toolLoader } from "./lib/dataLoader";
 import { ToolRecord } from "./lib/toolRecords";
 import { YatsugiGroup } from "./lib/yatsugiGroup";
 import { YatsugiTool } from "./lib/yatsugiTool";
+import { YatsugiSettings } from "./lib/yatsugiSettings";
+import { settingLoader } from "./lib/dataLoader";
 
 let groups: YatsugiGroup[] = [];
 let tools: YatsugiTool[] = [];
@@ -168,11 +170,11 @@ export function initDatabase() {
 
         try {
             await toolLoader.saveAllAsync(tools);
-            e.sender.send("database-delete-tool-reply", true);
+            return true;
         }
         catch (err) {
             console.error(err);
-            e.sender.send("database-delete-tool-reply", false);
+            return false;
         }
     });
 
@@ -238,5 +240,19 @@ export function initDatabase() {
     //
     ipcMain.handle("database-get-all-tools", (e) => {
         return tools.sort((l, r) => (l.name > r.name ? 1 : -1));
+    });
+
+    //
+    // Response on settings-load
+    //
+    ipcMain.handle("settings-load", async (e) => {
+        return await settingLoader.loadAsync();
+    });
+
+    //
+    // Response on settings-save
+    //
+    ipcMain.handle("settings-save", async (e, settings: YatsugiSettings) => {
+        await settingLoader.saveAsync(settings);
     });
 }

@@ -2,6 +2,7 @@ import { ipcRenderer } from "electron";
 
 import { YatsugiGroup } from "../lib/yatsugiGroup";
 import { YatsugiTool } from "../lib/yatsugiTool";
+import { YatsugiSettings } from "../lib/yatsugiSettings";
 
 export class DataManager<T extends YatsugiGroup | YatsugiTool> {
     private data: T[] | undefined;
@@ -39,6 +40,30 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
             }
             return null;
         }
+    }
+
+    async isValidLending(groupID: string, toolIDs: string[], settings: YatsugiSettings) {
+        const tools = await this.gets() as YatsugiTool[];
+
+        const alreadyLent = tools
+            .some(tool => tool.getGroup() != null && toolIDs.some(id => tool.id == id));
+        if (alreadyLent) {
+            return false;
+        }
+
+        const counters: number[] = [0, 0, 0, 0, 0, 0];
+        tools
+            .filter(tool => tool.getGroup() == groupID || toolIDs.some(id => tool.id == id))
+            .forEach(tool => {
+                counters[tool.tag]++;
+            });
+        const lentLimitOver = counters
+            .some((val, index) => val > settings.lendingLimit[index]);
+        if (lentLimitOver) {
+            return false;
+        }
+
+        return true;
     }
 
     async lentItem(groupID: string, toolIDs: string[]) {
