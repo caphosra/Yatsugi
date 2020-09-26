@@ -168,11 +168,11 @@ export function initDatabase() {
 
         try {
             await toolLoader.saveAllAsync(tools);
-            e.sender.send("database-delete-tool-reply", true);
+            return true;
         }
         catch (err) {
             console.error(err);
-            e.sender.send("database-delete-tool-reply", false);
+            return false;
         }
     });
 
