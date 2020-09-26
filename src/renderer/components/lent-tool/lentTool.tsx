@@ -1,4 +1,5 @@
 import * as React from "react";
+import { ipcRenderer } from "electron";
 import { Button, Card, Table } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
@@ -6,6 +7,7 @@ import { showInfoDialog, showErrorDialog } from "../../showDialog";
 import keyEventManager from "../../keyEventManager";
 import { YatsugiTool } from "../../../lib/yatsugiTool";
 import { YatsugiGroup } from "../../../lib/yatsugiGroup";
+import { YatsugiSettings } from "../../../lib/yatsugiSettings";
 import { groupData, toolData } from "../../dataManager";
 
 export interface ILentToolProps extends RouteComponentProps {
@@ -44,15 +46,19 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
             }
 
             const toolLoaded = await toolData.findByID(id);
-            if (toolLoaded) {
+            if (toolLoaded && this.state.group) {
                 const tools = this.state.tools.filter((tool) => {
                     return tool.id != toolLoaded.id;
                 });
                 tools.push(toolLoaded);
 
-                this.setState({
-                    tools: tools
-                });
+                const settings: YatsugiSettings = await ipcRenderer.invoke("settings-load");
+                const valid = await toolData.isValidLending(this.state.group.id, tools.map(tool => tool.id), settings);
+                if (valid) {
+                    this.setState({
+                        tools: tools
+                    });
+                }
                 return;
             }
 
