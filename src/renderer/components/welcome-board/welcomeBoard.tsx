@@ -91,6 +91,7 @@ export class WelcomeBoard extends React.Component<IWelcomeBoardProps, IWelcomeBo
                         </SelectModePanel>
                     </Col>
                 </Row></Container>
+                <p style={{ textAlign: "right", padding: "10px 50px" }}>Produced by capra314cabra (70th)</p>
             </div>
         );
     }
