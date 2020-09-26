@@ -2,8 +2,12 @@
 
 ![Build](https://github.com/capra314cabra/Yatsugi/workflows/Build/badge.svg)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/capra314cabra/yatsugi?include_prereleases)
+![GitHub](https://img.shields.io/github/license/capra314cabra/yatsugi)
+![GitHub repo size](https://img.shields.io/github/repo-size/capra314cabra/yatsugi)  
+[Repo](https://github.com/capra314cabra/Yatsugi) | [Author](https://github.com/capra314cabra)
 
-文化祭における器材貸し出しをスムーズに進める為のツールです.
+文化祭における器材貸し出しをスムーズに進める為のツールです.  
+まだ十分に拡張の余地はありますのでためらわずcontributeしてください.
 
 ![Example](https://raw.githubusercontent.com/capra314cabra/Yatsugi/master/img/example.png)
 
@@ -43,3 +47,7 @@ git checkout csharp-HEAD
 |opendev|||
 
 `database-check-*`はIDで検索するのに対して、`database-find-*`は文字列で検索をします。
+
+## Author
+
+[capra314cabra](https://github.com/capra314cabra)
