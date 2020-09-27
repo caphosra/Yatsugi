@@ -17,12 +17,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        name: Checkout
         with:
           lfs: true
       - run: git lfs checkout
+        name: Checkout LFS
       - uses: actions/setup-node@v2-beta
+        name: Setup Node.js
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - run: npm install -D
+      - run: |
+          npm install
+          npm install -D
+        name: Install dependency packages
       - run: npm run build
+        name: Build this app
