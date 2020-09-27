@@ -2,7 +2,7 @@ name: Publish
 
 on:
   push:
-    branches: [master]
+    branches: [master, feature/ci/*]
 
 jobs:
   publish:
@@ -32,10 +32,10 @@ jobs:
         name: Pack this app
       - run: copy ./README.md ./bin/README.md
         name: Copy README (Windows)
-        if: ${{ matrix.os == "windows-latest" }}
+        if: ${{ matrix.os == 'windows-latest' }}
       - run: cp ./README.md ./bin/README.md
         name: Copy README (Unix)
-        if: ${{ matrix.os != "windows-latest" }}
+        if: ${{ matrix.os != 'windows-latest' }}
       - uses: actions/upload-artifact@v2
         name: Upload artifacts
         with:
