@@ -1,6 +1,6 @@
 {
     "name": "yatsugi",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "description": "文化祭における器材貸し出しをスムーズに進める為のツールです.",
     "main": "./dist/main.js",
     "scripts": {
