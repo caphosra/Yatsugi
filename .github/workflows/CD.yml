@@ -24,7 +24,12 @@ jobs:
       - run: npm install
       - run: npm install -D
       - run: npm run pack
+      - name: copy file
+        uses: canastro/copy-file-action@master
+        with:
+          source: "./README.md"
+          target: "./bin/README.md"
       - uses: actions/upload-artifact@v2
         with:
-          name: "Yatsugi for ${{ matrix.os }}"
+          name: "Yatsugi-for-${{ matrix.os }}"
           path: ./bin/
