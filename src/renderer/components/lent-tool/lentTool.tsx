@@ -35,7 +35,6 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
     onKeyDown = async (e: KeyboardEvent) => {
         if (e.key == "Enter") {
             const id = this.currentText;
-            showErrorDialog(this.currentText);
             this.currentText = "";
 
             const groupLoaded = await groupData.findByID(id);
