@@ -42,6 +42,12 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
         }
     }
 
+    async isAlreadyLent(id: string) {
+        const tools = await this.gets() as YatsugiTool[];
+
+        return tools.some(tool => tool.getGroup() != null && tool.id == id);
+    }
+
     async isValidLending(groupID: string, toolIDs: string[], settings: YatsugiSettings) {
         const tools = await this.gets() as YatsugiTool[];
 
@@ -84,9 +90,7 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
 
     async returnItem(toolIDs: string[]) {
         const isValid = await this.validReturnItem(toolIDs);
-        if (!isValid) {
-            throw "もう既に返却されている器材を返却しようとしています。";
-        }
+        if (!isValid) return;
         for (const id of toolIDs) {
             const succeeded: boolean = await ipcRenderer.invoke("database-return-tool", id);
 
@@ -116,7 +120,7 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
         await this.update();
     }
 
-    private async validLentItem(toolIDs: string[]): Promise<boolean> {
+    async validLentItem(toolIDs: string[]): Promise<boolean> {
         if (this.kind == "group") {
             throw "\"団体\"は貸し出し可能な\"器材\"ではありません。";
         }
