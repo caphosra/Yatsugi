@@ -72,7 +72,7 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
         return true;
     }
 
-    async lentItem(groupID: string, toolIDs: string[]) {
+    private async lentItem(groupID: string, toolIDs: string[]) {
         const isValid = await this.validLentItem(toolIDs);
         if (!isValid) {
             throw "もう既に貸出されている器材を貸し出そうとしています。";
