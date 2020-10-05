@@ -155,27 +155,6 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
         }
     }
 
-    private async validReturnItem(toolIDs: string[]): Promise<boolean> {
-        if (this.kind == "group") {
-            throw "\"団体\"は貸し出し可能な\"器材\"ではありません。";
-        }
-        if (!this.data) {
-            await this.update();
-            return await this.validReturnItem(toolIDs);
-        }
-        else {
-            for (const item of this.data) {
-                if (toolIDs.includes(item.id)) {
-                    const tool = item as YatsugiTool;
-                    if (!tool.getGroup()) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-    }
-
     private convertFromJson(item: T) {
         if (this.kind == "group") {
             return new YatsugiGroup(item as YatsugiGroup) as T;

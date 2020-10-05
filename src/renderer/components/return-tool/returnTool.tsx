@@ -74,8 +74,7 @@ export class ReturnTool extends React.Component<IReturnToolProps, IReturnToolSta
             this.props.history.push("/");
         }
         catch (err) {
-            if(err !== "もう既に返却されている器材を返却しようとしています。")await showErrorDialog(err);
-            else this.props.history.push("/");
+            await showErrorDialog(err);
         }
     }
 
