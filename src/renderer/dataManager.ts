@@ -72,7 +72,7 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
         return true;
     }
 
-    private async lentItem(groupID: string, toolIDs: string[]) {
+    async lentItem(groupID: string, toolIDs: string[]) {
         const isValid = await this.validLentItem(toolIDs);
         if (!isValid) {
             throw "もう既に貸出されている器材を貸し出そうとしています。";
@@ -89,9 +89,9 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
     }
 
     async returnItem(toolIDs: string[]) {
-        const isValid = await this.validReturnItem(toolIDs);
-        if (!isValid) return;
-        for (const id of toolIDs) {
+        const fixed = await this.fixReturnItem(toolIDs);
+
+        for (const id of fixed) {
             const succeeded: boolean = await ipcRenderer.invoke("database-return-tool", id);
 
             if (!succeeded) {
@@ -120,7 +120,7 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
         await this.update();
     }
 
-    async validLentItem(toolIDs: string[]): Promise<boolean> {
+    private async validLentItem(toolIDs: string[]): Promise<boolean> {
         if (this.kind == "group") {
             throw "\"団体\"は貸し出し可能な\"器材\"ではありません。";
         }
@@ -138,6 +138,20 @@ export class DataManager<T extends YatsugiGroup | YatsugiTool> {
                 }
             }
             return true;
+        }
+    }
+
+    private async fixReturnItem(toolIDs: string[]): Promise<string[]> {
+        if (this.kind == "group") {
+            throw "\"団体\"は貸し出し可能な\"器材\"ではありません。";
+        }
+        if (!this.data) {
+            await this.update();
+            return await this.fixReturnItem(toolIDs);
+        }
+        else {
+            const tools = await this.gets() as YatsugiTool[];
+            return toolIDs.filter(id => tools.some(tool => tool.getGroup() && id == tool.id));
         }
     }
 
