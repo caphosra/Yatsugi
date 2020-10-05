@@ -52,12 +52,21 @@ export class LentTool extends React.Component<ILentToolProps, ILentToolState> {
                 });
                 tools.push(toolLoaded);
 
+                const alreadyLent = await toolData.isAlreadyLent(toolLoaded.id);
+                if(alreadyLent){
+                    showErrorDialog("もう既に貸出されている器材を貸し出そうとしています。");
+                    return;
+                }
+
                 const settings: YatsugiSettings = await ipcRenderer.invoke("settings-load");
                 const valid = await toolData.isValidLending(this.state.group.id, tools.map(tool => tool.id), settings);
                 if (valid) {
                     this.setState({
                         tools: tools
                     });
+                }
+                else {
+                    showErrorDialog("貸出数制限を超えました。");
                 }
                 return;
             }
