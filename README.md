@@ -4,7 +4,7 @@
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/capra314cabra/yatsugi?include_prereleases)
 ![GitHub](https://img.shields.io/github/license/capra314cabra/yatsugi)
 ![GitHub repo size](https://img.shields.io/github/repo-size/capra314cabra/yatsugi)  
-[Repo](https://github.com/capra314cabra/Yatsugi) | [Author](https://github.com/capra314cabra)
+[Repository URL](https://github.com/capra314cabra/Yatsugi)
 
 文化祭における器材貸し出しをスムーズに進める為のツールです.  
 まだ十分に拡張の余地はありますのでためらわずcontributeしてください!
@@ -50,5 +50,5 @@ git checkout csharp-HEAD
 
 ## Author
 
-[capra314cabra](https://github.com/capra314cabra)
-[kaage](https://github.com/ageprocpp)
+- [capra314cabra](https://github.com/capra314cabra)
+- [kaage](https://github.com/ageprocpp)
