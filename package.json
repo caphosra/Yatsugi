@@ -29,7 +29,7 @@
         "ts-loader": "^8.1.0",
         "ts-node": "^9.1.1",
         "typescript": "^3.9.5",
-        "webpack": "^4.46.0",
+        "webpack": "^5.36.1",
         "webpack-cli": "^4.6.0"
     },
     "dependencies": {
