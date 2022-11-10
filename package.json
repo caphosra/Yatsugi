@@ -24,7 +24,7 @@
         "@types/uuid": "^8.3.0",
         "@types/webpack": "^5.28.0",
         "cross-env": "^7.0.2",
-        "electron": "^12.1.0",
+        "electron": "^18.3.7",
         "electron-builder": "^22.8.0",
         "ts-loader": "^9.1.2",
         "ts-node": "^9.1.1",
